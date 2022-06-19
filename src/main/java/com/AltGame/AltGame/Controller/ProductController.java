@@ -1,41 +1,48 @@
 package com.AltGame.AltGame.Controller;
 
-import com.AltGame.AltGame.Dto.ResponDto;
+import com.AltGame.AltGame.Dto.ResponseDto;
 import com.AltGame.AltGame.Service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/products/")
+@RequestMapping("/api/products")
 public class ProductController {
     @Autowired
     ProductService productService;
-    @GetMapping(path="")
-    public ResponDto index()    // Get All Data From Table
+
+    // Get All Data From Table
+    @GetMapping(path="/index")
+    public ResponseDto index()
     {
-        ResponDto responDto = new ResponDto();
-        responDto.setStatus("200");
-        responDto.setMessage("Success Store User");
-        responDto.setData(productService.index());
-        return  responDto;
+        ResponseDto responseDto = new ResponseDto("200","Success Store User",productService.index());
+        return responseDto;
+    }
+
+    // Get One Data From Table
+    @GetMapping(path="/show/{idProduct}")
+    public void show(@PathVariable int idProduct)
+    {
+
     }
 
     // Save Data To Table
+    @PostMapping(path="/store")
     public void store()
     {
 
     }
 
     // Update Data To Table
-    public void update()
+    @PostMapping(path="/update/{idProduct}")
+    public void update(@PathVariable int idProduct)
     {
 
     }
 
     // Delete Data From Table
-    public void destroy()
+    @PostMapping(path="/destroy/{idProduct}")
+    public void destroy(@PathVariable int idProduct)
     {
 
     }

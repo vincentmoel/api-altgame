@@ -1,6 +1,6 @@
 package com.AltGame.AltGame.Config;
 
-import com.AltGame.AltGame.Dto.ResponDto;
+import com.AltGame.AltGame.Dto.ResponseDto;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,12 +51,12 @@ public class RefreshToken extends UsernamePasswordAuthenticationFilter {
         Map<String,String> map = new HashMap<>();
         map.put("access_token", accessToken);
         map.put("refresh_token", refreshToken);
-        ResponDto responDto = new ResponDto();
-        responDto.setStatus("200");
-        responDto.setMessage("Succes Login");
-        responDto.setData(map);
+        ResponseDto responseDto = new ResponseDto();
+        responseDto.setStatus("200");
+        responseDto.setMessage("Succes Login");
+        responseDto.setData(map);
         response.setContentType(APPLICATION_JSON_VALUE);
-        new ObjectMapper().writeValue(response.getOutputStream(), responDto);
+        new ObjectMapper().writeValue(response.getOutputStream(), responseDto);
     }
 
     @Override

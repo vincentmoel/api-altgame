@@ -1,7 +1,7 @@
 package com.AltGame.AltGame.Controller;
 
 import com.AltGame.AltGame.Dto.RegisterDto;
-import com.AltGame.AltGame.Dto.ResponDto;
+import com.AltGame.AltGame.Dto.ResponseDto;
 import com.AltGame.AltGame.Entity.RoleEntity;
 import com.AltGame.AltGame.Entity.UserEntity;
 import com.AltGame.AltGame.Service.UserService;
@@ -30,20 +30,16 @@ public class LoginController {
     @Autowired
     UserService userService;
 
-    @PostMapping(value = "/singup")
-    public ResponDto createNewUser(@RequestBody RegisterDto registerDto) {
-        ResponDto respon = new ResponDto();
+    @PostMapping(value = "/api/signup")
+    public ResponseDto createNewUser(@RequestBody RegisterDto registerDto) {
+        ResponseDto response;
         UserEntity user = userService.username(registerDto.getUsername());
         if(Objects.isNull(user)){
-            respon.setData(userService.store_buyer(registerDto));
-            respon.setStatus("200");
-            respon.setMessage("Berhasil");
+            response = new ResponseDto("200","Success Register User",userService.store_buyer(registerDto));
         }else{
-            respon.setData(registerDto);
-            respon.setStatus("200");
-            respon.setMessage("Gagal");
+            response = new ResponseDto("400","Error Register User");
         }
-        return respon;
+        return response;
     }
 
     @GetMapping("/refresh-token")

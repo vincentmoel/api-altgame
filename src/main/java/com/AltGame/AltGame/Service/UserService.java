@@ -56,9 +56,11 @@ public class UserService {
         userRepo.save(user);
         return buyerDto;
     }
+
     public Optional<UserEntity> get_buyer(Integer id){
         return userRepo.findById(id);
     }
+
     public UserEntity username(String username){
         return userRepo.findByUsername(username);
     }

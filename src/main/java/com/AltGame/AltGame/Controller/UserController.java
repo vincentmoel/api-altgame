@@ -1,7 +1,7 @@
 package com.AltGame.AltGame.Controller;
 
 import com.AltGame.AltGame.Dto.BuyerDto;
-import com.AltGame.AltGame.Dto.ResponDto;
+import com.AltGame.AltGame.Dto.ResponseDto;
 import com.AltGame.AltGame.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,12 +23,12 @@ public class UserController {
 
     }
     @GetMapping("/buyer/{id}")
-    public ResponDto get_buyer(@PathVariable("id") Integer id){
-        ResponDto responDto = new ResponDto();
-        responDto.setStatus("200");
-        responDto.setMessage("message");
-        responDto.setData(userService.get_buyer(id));
-        return responDto;
+    public ResponseDto get_buyer(@PathVariable("id") Integer id){
+        ResponseDto responseDto = new ResponseDto();
+        responseDto.setStatus("200");
+        responseDto.setMessage("message");
+        responseDto.setData(userService.get_buyer(id));
+        return responseDto;
     }
     // Save Data To Table
     public void store()
@@ -42,13 +42,13 @@ public class UserController {
 
     }
     @PostMapping("/buyer")
-    public ResponDto update_buyer(BuyerDto buyerDto, @RequestParam("img")MultipartFile img) throws IOException {
-        ResponDto responDto = new ResponDto();
+    public ResponseDto update_buyer(BuyerDto buyerDto, @RequestParam("img")MultipartFile img) throws IOException {
+        ResponseDto responseDto = new ResponseDto();
         buyerDto.setImg(img);
-        responDto.setStatus("200");
-        responDto.setMessage("message");
-        responDto.setData(userService.update_buyer(buyerDto));
-        return responDto;
+        responseDto.setStatus("200");
+        responseDto.setMessage("message");
+        responseDto.setData(userService.update_buyer(buyerDto));
+        return responseDto;
     }
 
     // Delete Data From Table

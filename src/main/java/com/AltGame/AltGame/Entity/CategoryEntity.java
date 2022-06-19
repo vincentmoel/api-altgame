@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Table(name="categories")
 @Data
 public class CategoryEntity {
     @Id

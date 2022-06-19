@@ -1,7 +1,6 @@
 package com.AltGame.AltGame.Repository;
 
 import com.AltGame.AltGame.Entity.CategoryEntity;
-import jdk.jfr.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
