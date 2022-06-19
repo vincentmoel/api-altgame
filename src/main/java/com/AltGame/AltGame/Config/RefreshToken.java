@@ -51,10 +51,7 @@ public class RefreshToken extends UsernamePasswordAuthenticationFilter {
         Map<String,String> map = new HashMap<>();
         map.put("access_token", accessToken);
         map.put("refresh_token", refreshToken);
-        ResponseDto responseDto = new ResponseDto();
-        responseDto.setStatus("200");
-        responseDto.setMessage("Succes Login");
-        responseDto.setData(map);
+        ResponseDto responseDto = new ResponseDto("200","Succes Login",map);
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), responseDto);
     }

@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.Optional;
 
 @Service
@@ -26,12 +27,15 @@ public class UserService {
 
     public RegisterDto store_buyer(RegisterDto registerDto){
         UserEntity user = new UserEntity();
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         user.setUsername(registerDto.getUsername());
         user.setPassword(bCryptPasswordEncoder.encode(registerDto.getPassword()));
         user.setName(registerDto.getName());
         user.setEmail(registerDto.getEmail());
         user.setPhone(registerDto.getPhone());
         user.setRoleId(1);
+        user.setCreatedAt(timestamp);
+        user.setCreatedAt(timestamp);
         userRepo.save(user);
         return registerDto;
     }
