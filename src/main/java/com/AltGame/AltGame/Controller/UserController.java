@@ -2,9 +2,10 @@ package com.AltGame.AltGame.Controller;
 
 import com.AltGame.AltGame.Dto.BuyerDto;
 import com.AltGame.AltGame.Dto.ResponseDto;
+import com.AltGame.AltGame.Dto.RegisterSellerDto;
+import com.AltGame.AltGame.Dto.SellerDto;
 import com.AltGame.AltGame.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.*;
@@ -22,33 +23,36 @@ public class UserController {
     {
 
     }
-    @GetMapping("/buyer/{id}")
-    public ResponseDto get_buyer(@PathVariable("id") Integer id){
-        ResponseDto responseDto = new ResponseDto();
-        responseDto.setStatus("200");
-        responseDto.setMessage("message");
-        responseDto.setData(userService.get_buyer(id));
-        return responseDto;
+    @GetMapping("/{id}")
+    public ResponseDto get_user(@PathVariable("id") Integer id){
+        return new ResponseDto("200", "Succes Get Data", userService.get_user(id));
     }
     // Save Data To Table
     public void store()
     {
 
     }
+    @PostMapping("/seller")
+    public ResponseDto register_seller(@RequestBody RegisterSellerDto registerSellerDto){
+        userService.store_seller(registerSellerDto);
+        return new ResponseDto("200","Succes Register Seller");
 
-    // Update Data To Table
+    }    // Update Data To Table
     public void update()
     {
 
     }
-    @PostMapping("/buyer")
+    @PutMapping("/buyer")
     public ResponseDto update_buyer(BuyerDto buyerDto, @RequestParam("img")MultipartFile img) throws IOException {
-        ResponseDto responseDto = new ResponseDto();
         buyerDto.setImg(img);
-        responseDto.setStatus("200");
-        responseDto.setMessage("message");
-        responseDto.setData(userService.update_buyer(buyerDto));
-        return responseDto;
+        userService.update_buyer(buyerDto);
+        return new ResponseDto("200","Succes Update");
+    }
+    @PutMapping("/seller")
+    public ResponseDto update_seller(SellerDto sellerDto, @RequestParam("img")MultipartFile img) throws IOException {
+        sellerDto.setImg(img);
+        userService.update_seller(sellerDto);
+        return new ResponseDto("200","Succes Update");
     }
 
     // Delete Data From Table
