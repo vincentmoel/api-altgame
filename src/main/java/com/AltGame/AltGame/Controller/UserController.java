@@ -23,7 +23,7 @@ public class UserController {
     {
 
     }
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseDto get_user(@PathVariable("id") Integer id){
         return new ResponseDto("200", "Succes Get Data", userService.get_user(id));
     }
@@ -32,7 +32,7 @@ public class UserController {
     {
 
     }
-    @PostMapping("/seller")
+    @PostMapping("/signup/seller")
     public ResponseDto register_seller(@RequestBody RegisterSellerDto registerSellerDto){
         userService.store_seller(registerSellerDto);
         return new ResponseDto("200","Succes Register Seller");
@@ -42,13 +42,13 @@ public class UserController {
     {
 
     }
-    @PutMapping("/buyer")
+    @PutMapping("/update/buyer")
     public ResponseDto update_buyer(BuyerDto buyerDto, @RequestParam("img")MultipartFile img) throws IOException {
         buyerDto.setImg(img);
         userService.update_buyer(buyerDto);
         return new ResponseDto("200","Succes Update");
     }
-    @PutMapping("/seller")
+    @PutMapping("/update/seller")
     public ResponseDto update_seller(SellerDto sellerDto, @RequestParam("img")MultipartFile img) throws IOException {
         sellerDto.setImg(img);
         userService.update_seller(sellerDto);

@@ -93,6 +93,7 @@ public class UserService {
             user.setImage(sellerDto.getImg().getBytes());
             user.setEmail(sellerDto.getEmail());
             user.setPhone(sellerDto.getPhone());
+            user.setBankAccount(sellerDto.getBankAccount());
             user.setUpdatedAt(timestamp);
         }
         userRepo.save(user);
