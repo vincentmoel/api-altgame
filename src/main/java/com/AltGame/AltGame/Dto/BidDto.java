@@ -13,4 +13,5 @@ public class BidDto {
     private String status;
     private Date createdAt;
     private Date updatedAt;
+    private Date deletedAt;
 }
