@@ -36,15 +36,15 @@ public class UsersSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers("/login/**").permitAll();
         http.authorizeRequests().antMatchers("/api/signup", "/swagger-ui.html/**","/refresh-token","/api/products/").permitAll();
-        http.authorizeRequests().antMatchers("/api/users/signup/seller","/api/users/update/buyer").hasAnyAuthority("buyer");
-        http.authorizeRequests().antMatchers("/api/users/update/seller").hasAnyAuthority("seller");
-        http.authorizeRequests().antMatchers("/api/users/id/").hasAnyAuthority("buyer","seller");
+        http.authorizeRequests().antMatchers("/api/bids/**").hasAnyAuthority("buyer");
+        http.authorizeRequests().antMatchers("/api/products/**").hasAnyAuthority("seller");
+        http.authorizeRequests().antMatchers("/api/users/**").hasAnyAuthority("buyer","seller");
 
 
         http.authorizeRequests().anyRequest().authenticated();
 
         http.addFilterBefore(new CustomeAuthorFillter(), UsernamePasswordAuthenticationFilter.class);
-        http.addFilter(new RefreshToken(authenticationManagerBean()));
+        http.addFilter(new RefreshToken(authenticationManagerBean(), getApplicationContext()));
     }
 
     @Override

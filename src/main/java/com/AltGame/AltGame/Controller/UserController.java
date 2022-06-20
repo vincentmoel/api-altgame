@@ -1,9 +1,7 @@
 package com.AltGame.AltGame.Controller;
 
-import com.AltGame.AltGame.Dto.BuyerDto;
-import com.AltGame.AltGame.Dto.ResponseDto;
-import com.AltGame.AltGame.Dto.RegisterSellerDto;
-import com.AltGame.AltGame.Dto.SellerDto;
+import com.AltGame.AltGame.Dto.*;
+import com.AltGame.AltGame.Entity.VwUserEntity;
 import com.AltGame.AltGame.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,6 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -27,37 +27,14 @@ public class UserController {
     public ResponseDto get_user(@PathVariable("id") Integer id){
         return new ResponseDto("200", "Succes Get Data", userService.get_user(id));
     }
-    // Save Data To Table
-    public void store()
-    {
-
-    }
-    @PostMapping("/signup/seller")
-    public ResponseDto register_seller(@RequestBody RegisterSellerDto registerSellerDto){
-        userService.store_seller(registerSellerDto);
-        return new ResponseDto("200","Succes Register Seller");
-
-    }    // Update Data To Table
-    public void update()
-    {
-
-    }
-    @PutMapping("/update/buyer")
-    public ResponseDto update_buyer(BuyerDto buyerDto, @RequestParam("img")MultipartFile img) throws IOException {
-        buyerDto.setImg(img);
-        userService.update_buyer(buyerDto);
+    @PutMapping("/update")
+    public ResponseDto update(UserDto userDto, @RequestParam("img")MultipartFile img) throws IOException {
+        Optional<VwUserEntity> user = userService.get_user(userDto.getUserId());
+        userDto.setImg(img);
+        if(Objects.isNull(user)){
+            return new ResponseDto("400","Failed Update");
+        }
+        userService.update(userDto);
         return new ResponseDto("200","Succes Update");
-    }
-    @PutMapping("/update/seller")
-    public ResponseDto update_seller(SellerDto sellerDto, @RequestParam("img")MultipartFile img) throws IOException {
-        sellerDto.setImg(img);
-        userService.update_seller(sellerDto);
-        return new ResponseDto("200","Succes Update");
-    }
-
-    // Delete Data From Table
-    public void destroy()
-    {
-
     }
 }

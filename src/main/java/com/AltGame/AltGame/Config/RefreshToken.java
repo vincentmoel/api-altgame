@@ -1,9 +1,13 @@
 package com.AltGame.AltGame.Config;
 
 import com.AltGame.AltGame.Dto.ResponseDto;
+import com.AltGame.AltGame.Entity.UserEntity;
+import com.AltGame.AltGame.Service.UserService;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,9 +30,14 @@ import java.util.stream.Collectors;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 public class RefreshToken extends UsernamePasswordAuthenticationFilter {
+    @Autowired
+    private UserService userService;
+
+
     private final AuthenticationManager authenticationManager;
 
-    public RefreshToken(AuthenticationManager authenticationManager){
+    public RefreshToken(AuthenticationManager authenticationManager, ApplicationContext ctx){
+        this.userService = ctx.getBean(UserService.class);
         this.authenticationManager = authenticationManager;
     }
 
@@ -48,10 +57,18 @@ public class RefreshToken extends UsernamePasswordAuthenticationFilter {
                 .withExpiresAt(new Date(System.currentTimeMillis() +240*60*1000))
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
-        Map<String,String> map = new HashMap<>();
-        map.put("access_token", accessToken);
-        map.put("refresh_token", refreshToken);
-        ResponseDto responseDto = new ResponseDto("200","Succes Login",map);
+        Map<String,String> token = new HashMap<>();
+        token.put("access_token", accessToken);
+        token.put("refresh_token", refreshToken);
+        UserEntity userEntity = userService.username(user.getUsername());
+        Map<String,String> account = new HashMap<>();
+        account.put("userId",userEntity.getUserId().toString());
+        account.put("username",userEntity.getUsername());
+        account.put("email",userEntity.getEmail());
+        Map<String,Object> data = new HashMap<>();
+        data.put("tokens",token);
+        data.put("users", account);
+        ResponseDto responseDto = new ResponseDto("200","Succes Login",data);
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), responseDto);
     }

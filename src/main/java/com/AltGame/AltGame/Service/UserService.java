@@ -1,9 +1,6 @@
 package com.AltGame.AltGame.Service;
 
-import com.AltGame.AltGame.Dto.BuyerDto;
-import com.AltGame.AltGame.Dto.RegisterDto;
-import com.AltGame.AltGame.Dto.RegisterSellerDto;
-import com.AltGame.AltGame.Dto.SellerDto;
+import com.AltGame.AltGame.Dto.*;
 import com.AltGame.AltGame.Entity.RoleEntity;
 import com.AltGame.AltGame.Entity.UserEntity;
 import com.AltGame.AltGame.Entity.VwUserEntity;
@@ -29,7 +26,7 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public RegisterDto store_buyer(RegisterDto registerDto){
+    public RegisterDto store(RegisterDto registerDto){
         UserEntity user = new UserEntity();
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         user.setUsername(registerDto.getUsername());
@@ -43,58 +40,20 @@ public class UserService {
         userRepo.save(user);
         return registerDto;
     }
-    public void store_seller(RegisterSellerDto registerSellerDto){
-        UserEntity user = userRepo.findById(registerSellerDto.getIdUser().intValue());
+    public void update(UserDto userDto) throws IOException {
+        UserEntity user = userRepo.findById(userDto.getUserId().intValue());
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        user.setRoleId(2);
-        user.setBankAccount(registerSellerDto.getBankAccount());
-        userRepo.save(user);
-    }
-    public void update_buyer(BuyerDto buyerDto) throws IOException {
-        UserEntity user = userRepo.findById(buyerDto.getIdUser().intValue());
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        if(buyerDto.getPassword().equals("")){
-            user.setUserId(buyerDto.getIdUser());
-            user.setUsername(buyerDto.getUsername());
-            user.setName(buyerDto.getName());
-            user.setImage(buyerDto.getImg().getBytes());
-            user.setEmail(buyerDto.getEmail());
-            user.setPhone(buyerDto.getPhone());
-            user.setUpdatedAt(timestamp);
-        }else{
-            user.setUserId(buyerDto.getIdUser());
-            user.setUsername(buyerDto.getUsername());
-            user.setPassword(bCryptPasswordEncoder.encode(buyerDto.getPassword()));
-            user.setName(buyerDto.getName());
-            user.setImage(buyerDto.getImg().getBytes());
-            user.setEmail(buyerDto.getEmail());
-            user.setPhone(buyerDto.getPhone());
-            user.setUpdatedAt(timestamp);
+        user.setUsername(userDto.getUsername());
+        user.setName(userDto.getName());
+        user.setImage(userDto.getImg().getBytes());
+        user.setEmail(userDto.getEmail());
+        user.setPhone(userDto.getPhone());
+        user.setUpdatedAt(timestamp);
+        if(userDto.getPassword().length() > 0){
+            user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
         }
-        userRepo.save(user);
-    }
-    public void update_seller(SellerDto sellerDto) throws IOException {
-        UserEntity user = userRepo.findById(sellerDto.getIdUser().intValue());
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        if(sellerDto.getPassword().equals("")){
-            user.setUserId(sellerDto.getIdUser());
-            user.setUsername(sellerDto.getUsername());
-            user.setName(sellerDto.getName());
-            user.setImage(sellerDto.getImg().getBytes());
-            user.setEmail(sellerDto.getEmail());
-            user.setPhone(sellerDto.getPhone());
-            user.setBankAccount(sellerDto.getBankAccount());
-            user.setUpdatedAt(timestamp);
-        }else{
-            user.setUserId(sellerDto.getIdUser());
-            user.setUsername(sellerDto.getUsername());
-            user.setPassword(bCryptPasswordEncoder.encode(sellerDto.getPassword()));
-            user.setName(sellerDto.getName());
-            user.setImage(sellerDto.getImg().getBytes());
-            user.setEmail(sellerDto.getEmail());
-            user.setPhone(sellerDto.getPhone());
-            user.setBankAccount(sellerDto.getBankAccount());
-            user.setUpdatedAt(timestamp);
+        if(userDto.getBankAccount().length() > 0){
+            user.setBankAccount(userDto.getBankAccount());
         }
         userRepo.save(user);
     }

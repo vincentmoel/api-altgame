@@ -35,7 +35,7 @@ public class LoginController {
         ResponseDto response;
         UserEntity user = userService.username(registerDto.getUsername());
         if(Objects.isNull(user)){
-            response = new ResponseDto("200","Success Register User",userService.store_buyer(registerDto));
+            response = new ResponseDto("200","Success Register User",userService.store(registerDto));
         }else{
             response = new ResponseDto("400","Error Register User");
         }
@@ -62,11 +62,14 @@ public class LoginController {
                         .withClaim("roles", roleEntity.get().getName())
                         .sign(algorithm);
 
-                Map<String,String> map = new HashMap<>();
-                map.put("access_token", accessToken);
-                map.put("refresh_token", refresh_token);
+                Map<String,String> token = new HashMap<>();
+                token.put("access_token", accessToken);
+                token.put("refresh_token", refresh_token);
+                Map<String,Object> data = new HashMap<>();
+                data.put("tokens",token);
+                data.put("users",userService.username(usernameDecode));
                 response.setContentType(APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(response.getOutputStream(), map);
+                new ObjectMapper().writeValue(response.getOutputStream(), data);
             }catch (Exception e){
                 response.setHeader("error", e.getMessage());
                 response.setStatus(FORBIDDEN.value());
