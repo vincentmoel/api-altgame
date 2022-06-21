@@ -58,8 +58,8 @@ public class UserService {
         userRepo.save(user);
     }
 
-    public Optional<VwUserEntity> get_user(Integer id){
-        return vwUserRepo.findById(id);
+    public Optional<VwUserEntity> get_user(String username){
+        return vwUserRepo.findByUsername(username);
     }
 
     public UserEntity username(String username){

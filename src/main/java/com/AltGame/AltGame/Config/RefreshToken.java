@@ -30,14 +30,11 @@ import java.util.stream.Collectors;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 public class RefreshToken extends UsernamePasswordAuthenticationFilter {
-    @Autowired
-    private UserService userService;
 
 
     private final AuthenticationManager authenticationManager;
 
-    public RefreshToken(AuthenticationManager authenticationManager, ApplicationContext ctx){
-        this.userService = ctx.getBean(UserService.class);
+    public RefreshToken(AuthenticationManager authenticationManager){
         this.authenticationManager = authenticationManager;
     }
 
@@ -60,14 +57,8 @@ public class RefreshToken extends UsernamePasswordAuthenticationFilter {
         Map<String,String> token = new HashMap<>();
         token.put("access_token", accessToken);
         token.put("refresh_token", refreshToken);
-        UserEntity userEntity = userService.username(user.getUsername());
-        Map<String,String> account = new HashMap<>();
-        account.put("userId",userEntity.getUserId().toString());
-        account.put("username",userEntity.getUsername());
-        account.put("email",userEntity.getEmail());
         Map<String,Object> data = new HashMap<>();
         data.put("tokens",token);
-        data.put("users", account);
         ResponseDto responseDto = new ResponseDto("200","Succes Login",data);
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), responseDto);
