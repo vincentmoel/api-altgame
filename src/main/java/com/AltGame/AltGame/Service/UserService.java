@@ -41,7 +41,7 @@ public class UserService {
         return registerDto;
     }
     public void update(UserDto userDto) throws IOException {
-        UserEntity user = userRepo.findById(userDto.getUserId().intValue());
+        UserEntity user = userRepo.findByUsername(userDto.getUsername());
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         user.setUsername(userDto.getUsername());
         user.setName(userDto.getName());
@@ -49,11 +49,15 @@ public class UserService {
         user.setEmail(userDto.getEmail());
         user.setPhone(userDto.getPhone());
         user.setUpdatedAt(timestamp);
+        if(userDto.getImg().getSize() > 0){
+            user.setImage(userDto.getImg().getBytes());
+        }
         if(userDto.getPassword().length() > 0){
             user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
         }
         if(userDto.getBankAccount().length() > 0){
             user.setBankAccount(userDto.getBankAccount());
+            user.setRoleId(2);
         }
         userRepo.save(user);
     }
@@ -62,6 +66,9 @@ public class UserService {
         return vwUserRepo.findByUsername(username);
     }
 
+    public boolean check_username(String username){
+        return userRepo.existsByUsername(username);
+    }
     public UserEntity username(String username){
         return userRepo.findByUsername(username);
     }

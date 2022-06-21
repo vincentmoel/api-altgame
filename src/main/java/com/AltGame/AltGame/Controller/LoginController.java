@@ -37,7 +37,7 @@ public class LoginController {
         if(Objects.isNull(user)){
             response = new ResponseDto("200","Success Register User",userService.store(registerDto));
         }else{
-            response = new ResponseDto("400","Error Register User");
+            response = new ResponseDto("400","Error Username Already Exist");
         }
         return response;
     }
