@@ -69,9 +69,6 @@ public class UserService {
     public boolean check_username(String username){
         return userRepo.existsByUsername(username);
     }
-    public UserEntity username(String username){
-        return userRepo.findByUsername(username);
-    }
     public UserEntity getUserByUsername(String username){
         return userRepo.findByUsername(username);
     }
