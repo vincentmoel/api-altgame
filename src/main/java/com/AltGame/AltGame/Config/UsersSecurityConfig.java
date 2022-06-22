@@ -34,11 +34,11 @@ public class UsersSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers("/login/**").permitAll();
+        http.authorizeRequests().antMatchers("/api/login/**").permitAll();
         http.authorizeRequests().antMatchers("/api/signup", "/swagger-ui.html/**","/refresh-token","/api/products/").permitAll();
 //        http.authorizeRequests().antMatchers("/api/bids/**").hasAnyAuthority("buyer");
 //        http.authorizeRequests().antMatchers("/api/products/**").hasAnyAuthority("seller");
-        http.authorizeRequests().antMatchers( "/api/**").hasAnyAuthority("buyer","seller");
+        http.authorizeRequests().antMatchers( "/api/users/**").hasAnyAuthority("buyer","seller");
 
 
         http.authorizeRequests().anyRequest().authenticated();
