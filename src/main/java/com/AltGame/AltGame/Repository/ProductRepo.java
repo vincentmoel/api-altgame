@@ -9,4 +9,5 @@ import javax.transaction.Transactional;
 @Repository
 @Transactional
 public interface ProductRepo extends JpaRepository<ProductEntity, Integer> {
+    ProductEntity findByProductId(Integer productId);
 }
