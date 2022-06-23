@@ -66,15 +66,15 @@ public class UserService {
         return vwUserRepo.findByUsername(username);
     }
 
-    public boolean check_username(String username){
-        return userRepo.existsByUsername(username);
-    }
     public UserEntity getUserByUsername(String username){
         return userRepo.findByUsername(username);
     }
     public Integer getUserIdByUsername(String username) {
         UserEntity userEntity = userRepo.findByUsername(username);
         return userEntity.getUserId();
+    }
+    public boolean exitsByEmail(String email){
+        return userRepo.existsByEmail(email);
     }
     public Optional<RoleEntity> role(Integer idRole){
         return roleRepo.findById(idRole);

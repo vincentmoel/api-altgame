@@ -34,7 +34,9 @@ public class LoginController {
     public ResponseDto createNewUser(@RequestBody RegisterDto registerDto) {
         ResponseDto response;
         UserEntity user = userService.getUserByUsername(registerDto.getUsername());
-        if(Objects.isNull(user)){
+        if(userService.exitsByEmail(registerDto.getUsername())){
+            response = new ResponseDto("400","Error Email Already Exist");
+        }else if(Objects.isNull(user)){
             response = new ResponseDto("200","Success Register User",userService.store(registerDto));
         }else{
             response = new ResponseDto("400","Error Username Already Exist");

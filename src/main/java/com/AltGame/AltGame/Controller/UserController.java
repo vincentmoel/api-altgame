@@ -42,7 +42,7 @@ public class UserController {
     public ResponseDto update(UserDto userDto,@RequestParam("img") MultipartFile img) throws IOException {
         userDto.setUsername(authentication().getPrincipal().toString());
         userDto.setImg(img);
-        if(userService.check_username(authentication().getPrincipal().toString())){
+        if(Objects.nonNull(userService.getUserByUsername(authentication().getPrincipal().toString()))){
             userService.update(userDto);
             return new ResponseDto("200","Succes Update");
         }
