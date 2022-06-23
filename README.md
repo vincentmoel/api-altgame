@@ -14,7 +14,7 @@
 # Intelj Initialize
 
 - ### Make  application-dev.properties
-```aidl
+```
 server.port=8080
 spring.datasource.username=postgres
 spring.datasource.password=
