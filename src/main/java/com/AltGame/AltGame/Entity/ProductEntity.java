@@ -1,46 +1,47 @@
 package com.AltGame.AltGame.Entity;
 
-
-
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name="products")
+@Table(name = "products")
 @Data
 public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="product_id")
+    @Column(name = "product_id")
     private Integer productId;
 
-    @Column(name="user_id")
+    @Column(name = "user_id")
     private Integer userId;
 
-    @Column(name="category_id")
+    @Column(name = "category_id")
     private Integer categoryId;
 
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
 
-    @Column(name="description")
+    @Column(name = "description")
     private String description;
 
-    @Column(name="price")
+    @Column(name = "price")
     private int price;
 
     @Lob
-    @Column(name="image")
+    @Column(name = "image")
     private byte image;
 
-    @Column(name="status")
+    @Column(name = "status")
     private String status;
 
-    @Column(name="created_at")
+    @Column(name = "created_at")
     private Date createdAt;
 
-    @Column(name="updated_at")
+    @Column(name = "updated_at")
     private Date updatedAt;
+
+    @Column(name = "deleted_at")
+    private Date deletedAt;
 }
