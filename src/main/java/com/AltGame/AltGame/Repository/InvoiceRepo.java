@@ -12,4 +12,6 @@ import javax.transaction.Transactional;
 public interface InvoiceRepo extends JpaRepository<InvoiceEntity, Integer> {
     @Query(value = "SELECT no_invoice FROM invoices ORDER BY invoice_id DESC LIMIT 1", nativeQuery = true)
     String lastNoInvoice();
+
+    InvoiceEntity findById(int invoiceId);
 }
