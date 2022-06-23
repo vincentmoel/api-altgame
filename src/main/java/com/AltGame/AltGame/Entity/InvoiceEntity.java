@@ -26,7 +26,7 @@ public class InvoiceEntity {
 
     @Lob
     @Column(name="image")
-    private byte image;
+    private byte[] image;
 
     @Column(name="created_at")
     private Date createdAt;
