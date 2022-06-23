@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -37,7 +38,7 @@ public class UsersFilterConfig implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity user = userRepo.findByUsername(username);
-        if(userRepo.existsByUsername(username)){
+        if(Objects.nonNull(user)){
             logger.info(username+ "found .!");
         }else{
             logger.error("user not found");
