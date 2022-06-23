@@ -1,7 +1,6 @@
 package com.AltGame.AltGame.Service;
 
 import com.AltGame.AltGame.Dto.BidDto;
-import com.AltGame.AltGame.Dto.BuyerDto;
 import com.AltGame.AltGame.Entity.BidEntity;
 import com.AltGame.AltGame.Repository.BidRepo;
 import org.springframework.beans.factory.annotation.Autowired;
