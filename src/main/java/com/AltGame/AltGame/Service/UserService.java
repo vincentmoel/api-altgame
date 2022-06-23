@@ -8,6 +8,8 @@ import com.AltGame.AltGame.Repository.RoleRepo;
 import com.AltGame.AltGame.Repository.UserRepo;
 import com.AltGame.AltGame.Repository.VwUserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +27,10 @@ public class UserService {
     private VwUserRepo vwUserRepo;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-
+    public Authentication authentication(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth;
+    }
     public RegisterDto store(RegisterDto registerDto){
         UserEntity user = new UserEntity();
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
