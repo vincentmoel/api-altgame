@@ -11,5 +11,6 @@ import javax.transaction.Transactional;
 public interface UserRepo extends JpaRepository<UserEntity, Integer> {
     UserEntity findById(int id);
     UserEntity findByUsername(String username);
-    boolean existsByUsername(String username);
+
+    boolean existsByEmail(String email);
 }

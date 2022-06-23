@@ -1,9 +1,8 @@
 package com.AltGame.AltGame.Controller;
 
-import com.AltGame.AltGame.Dto.BuyerDto;
-import com.AltGame.AltGame.Dto.ResponseDto;
-import com.AltGame.AltGame.Dto.RegisterSellerDto;
-import com.AltGame.AltGame.Dto.SellerDto;
+import com.AltGame.AltGame.Dto.*;
+import com.AltGame.AltGame.Entity.UserEntity;
+import com.AltGame.AltGame.Entity.VwUserEntity;
 import com.AltGame.AltGame.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,53 +10,41 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
     @Autowired
-    UserService userService;
+    private UserService userService;
+
+
+
+
 
     // Get All Data From Table
     public void index()
     {
 
     }
-    @GetMapping("/id/{id}")
-    public ResponseDto get_user(@PathVariable("id") Integer id){
-        return new ResponseDto("200", "Succes Get Data", userService.get_user(id));
+    @GetMapping("/get")
+    public ResponseDto get_user(){
+        Optional<VwUserEntity> vwUserEntity = userService.get_user(userService.authentication().getName());
+        System.out.println(userService.authentication().getName());
+        if(Objects.isNull(vwUserEntity)){
+            return new ResponseDto("404", "User Not Found");
+        }
+        return new ResponseDto("200", "Succes Get Data", vwUserEntity);
     }
-    // Save Data To Table
-    public void store()
-    {
-
-    }
-    @PostMapping("/signup/seller")
-    public ResponseDto register_seller(@RequestBody RegisterSellerDto registerSellerDto){
-        userService.store_seller(registerSellerDto);
-        return new ResponseDto("200","Succes Register Seller");
-
-    }    // Update Data To Table
-    public void update()
-    {
-
-    }
-    @PutMapping("/update/buyer")
-    public ResponseDto update_buyer(BuyerDto buyerDto, @RequestParam("img")MultipartFile img) throws IOException {
-        buyerDto.setImg(img);
-        userService.update_buyer(buyerDto);
-        return new ResponseDto("200","Succes Update");
-    }
-    @PutMapping("/update/seller")
-    public ResponseDto update_seller(SellerDto sellerDto, @RequestParam("img")MultipartFile img) throws IOException {
-        sellerDto.setImg(img);
-        userService.update_seller(sellerDto);
-        return new ResponseDto("200","Succes Update");
-    }
-
-    // Delete Data From Table
-    public void destroy()
-    {
-
+    @PutMapping("/update")
+    public ResponseDto update(UserDto userDto,@RequestParam("img") MultipartFile img) throws IOException {
+        userDto.setUsername(userService.authentication().getPrincipal().toString());
+        userDto.setImg(img);
+        if(Objects.nonNull(userService.getUserByUsername(userService.authentication().getPrincipal().toString()))){
+            userService.update(userDto);
+            return new ResponseDto("200","Succes Update");
+        }
+        return new ResponseDto("400","Failed Update");
     }
 }

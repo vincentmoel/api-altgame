@@ -33,11 +33,13 @@ public class LoginController {
     @PostMapping(value = "/api/signup")
     public ResponseDto createNewUser(@RequestBody RegisterDto registerDto) {
         ResponseDto response;
-        UserEntity user = userService.username(registerDto.getUsername());
-        if(Objects.isNull(user)){
-            response = new ResponseDto("200","Success Register User",userService.store_buyer(registerDto));
+        UserEntity user = userService.getUserByUsername(registerDto.getUsername());
+        if(userService.exitsByEmail(registerDto.getUsername())){
+            response = new ResponseDto("400","Error Email Already Exist");
+        }else if(Objects.isNull(user)){
+            response = new ResponseDto("200","Success Register User",userService.store(registerDto));
         }else{
-            response = new ResponseDto("400","Error Register User");
+            response = new ResponseDto("400","Error Username Already Exist");
         }
         return response;
     }
@@ -53,7 +55,7 @@ public class LoginController {
                 JWTVerifier jwtVerifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = jwtVerifier.verify(refresh_token);
                 String usernameDecode = decodedJWT.getSubject();
-                UserEntity userLogin = userService.username(usernameDecode);
+                UserEntity userLogin = userService.getUserByUsername(usernameDecode);
                 Optional<RoleEntity> roleEntity = userService.role(userLogin.getRoleId());
                 String accessToken = JWT.create()
                         .withSubject(userLogin.getUsername())
@@ -62,11 +64,14 @@ public class LoginController {
                         .withClaim("roles", roleEntity.get().getName())
                         .sign(algorithm);
 
-                Map<String,String> map = new HashMap<>();
-                map.put("access_token", accessToken);
-                map.put("refresh_token", refresh_token);
+                Map<String,String> token = new HashMap<>();
+                token.put("access_token", accessToken);
+                token.put("refresh_token", refresh_token);
+                Map<String,Object> data = new HashMap<>();
+                data.put("tokens",token);
+                data.put("users",userService.getUserByUsername(usernameDecode));
                 response.setContentType(APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(response.getOutputStream(), map);
+                new ObjectMapper().writeValue(response.getOutputStream(), data);
             }catch (Exception e){
                 response.setHeader("error", e.getMessage());
                 response.setStatus(FORBIDDEN.value());

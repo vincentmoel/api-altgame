@@ -11,6 +11,26 @@
 <img src="https://img.shields.io/badge/Spring%20Boot%20Version-2.6.8-green" alt="Latest Stable Version">
 </p>
 
+# Intelj Initialize
+
+- ### Make  application-dev.properties
+```aidl
+server.port=8080
+spring.datasource.username=postgres
+spring.datasource.password=
+spring.datasource.url=jdbc:postgresql://localhost:5432/altgame
+
+spring.jpa.hibernate.ddl-auto = update
+
+
+spring.jpa.properties.hibernate.format_sql=true
+logging.level.org.hibernate.SQL=DEBUG   
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+spring.mvc.pathmatch.matching-strategy = ANT_PATH_MATCHER
+```
+- ### Maven Command
+` maven clean install `
+
 # Requirements
 
 - `Java 8`

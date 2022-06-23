@@ -11,9 +11,13 @@ import javax.transaction.Transactional;
 @Repository
 @Transactional
 public interface ProductRepo extends JpaRepository<ProductEntity, Integer> {
+
 	List<ProductEntity> findByUserId(int userId);
 
 	ProductEntity findByProductId(int productId);
 
 	ProductEntity findByProductIdAndUserId(int productId, int userId);
+  
+  ProductEntity findByProductId(Integer productId);
+
 }

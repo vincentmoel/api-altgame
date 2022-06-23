@@ -4,8 +4,8 @@ import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
-public class SellerDto {
-    private Integer idUser;
+public class UserDto {
+    private Integer userId;
     private String name;
     private String username;
     private String email;
@@ -13,5 +13,4 @@ public class SellerDto {
     private String phone;
     private MultipartFile img;
     private String bankAccount;
-
 }

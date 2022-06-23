@@ -10,6 +10,9 @@ import java.util.List;
 @Repository
 @Transactional
 public interface BidRepo extends JpaRepository<BidEntity, Integer> {
+    BidEntity findByBidId(Integer bidId);
+    List<BidEntity> findAllByProductIdAndStatus(Integer productId, String status);
     BidEntity findByBidIdAndUserId(Integer bidId, Integer userId);
-    List<BidEntity> findByUserId(Integer userId);
+    List<BidEntity> findAllByUserIdOrderByCreatedAtDesc(Integer userId);
+    List<BidEntity> findAllByProductIdOrderByCreatedAtDesc(Integer productId);
 }
