@@ -33,7 +33,7 @@ public class LoginController {
     @PostMapping(value = "/api/signup")
     public ResponseDto createNewUser(@RequestBody RegisterDto registerDto) {
         ResponseDto response;
-        UserEntity user = userService.username(registerDto.getUsername());
+        UserEntity user = userService.getUserByUsername(registerDto.getUsername());
         if(Objects.isNull(user)){
             response = new ResponseDto("200","Success Register User",userService.store(registerDto));
         }else{
@@ -53,7 +53,7 @@ public class LoginController {
                 JWTVerifier jwtVerifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = jwtVerifier.verify(refresh_token);
                 String usernameDecode = decodedJWT.getSubject();
-                UserEntity userLogin = userService.username(usernameDecode);
+                UserEntity userLogin = userService.getUserByUsername(usernameDecode);
                 Optional<RoleEntity> roleEntity = userService.role(userLogin.getRoleId());
                 String accessToken = JWT.create()
                         .withSubject(userLogin.getUsername())
@@ -67,7 +67,7 @@ public class LoginController {
                 token.put("refresh_token", refresh_token);
                 Map<String,Object> data = new HashMap<>();
                 data.put("tokens",token);
-                data.put("users",userService.username(usernameDecode));
+                data.put("users",userService.getUserByUsername(usernameDecode));
                 response.setContentType(APPLICATION_JSON_VALUE);
                 new ObjectMapper().writeValue(response.getOutputStream(), data);
             }catch (Exception e){

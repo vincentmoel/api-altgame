@@ -20,6 +20,7 @@ public class BidController {
     @Autowired
     BidService bidService;
 
+
     // Get All Data From Table
     @GetMapping(path="/index")
     public ResponseDto index()
@@ -85,6 +86,29 @@ public class BidController {
             responseDto = new ResponseDto("204", "Failed Destroy Bid");
         }
         return responseDto;
+    }
+
+    // Can be access by Product Owner only
+    @GetMapping(path="/all-bids-product/{productId}")
+    public ResponseDto getAllBidsOnProduct(@PathVariable Integer productId)
+    {
+
+        List<BidEntity> bids = bidService.getAllBidsOnProduct(productId);
+        return new ResponseDto("200","Success Update Bid", bids);
+
+    }
+
+    // Can be access by Product Owner only
+    @PostMapping(path="/accept-bid-buyer/{productId}")
+    public ResponseDto acceptBidBuyer(@PathVariable Integer productId, @RequestBody BidDto bidDto)
+    {
+
+        BidEntity bid = bidService.acceptBidBuyer(productId, bidDto);
+
+        ResponseDto responseDto = new ResponseDto("200", "Success Accept Bid Buyer",bid);
+
+        return responseDto;
+
     }
 
 
