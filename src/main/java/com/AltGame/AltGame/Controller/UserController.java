@@ -26,7 +26,7 @@ public class UserController {
         }
         return new ResponseDto("200", "Success Get Data", vwUserEntity);
     }
-    @PutMapping("/update")
+    @PostMapping("/update")
     public ResponseDto update(UserDto userDto,@RequestParam("img") MultipartFile img) throws IOException {
         userDto.setUsername(userService.authentication().getPrincipal().toString());
         userDto.setImage(img);
