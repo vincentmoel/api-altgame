@@ -31,7 +31,7 @@ public class ProductEntity {
 
     @Lob
     @Column(name = "image")
-    private byte image;
+    private byte[] image;
 
     @Column(name = "status")
     private String status;

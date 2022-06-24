@@ -5,6 +5,7 @@ import com.AltGame.AltGame.Dto.ResponseDto;
 import com.AltGame.AltGame.Entity.ProductEntity;
 import com.AltGame.AltGame.Service.ProductService;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/products")
@@ -42,7 +44,8 @@ public class ProductController {
 
     // Save Data To Table
     @PostMapping(path = "/store")
-    public ResponseDto store(@RequestBody ProductDto pDto) {
+    public ResponseDto store(ProductDto pDto, @RequestParam("image") MultipartFile image) throws IOException {
+        pDto.setImage(image);
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
 
         return new ResponseDto("200", "Success Store Product",
@@ -51,7 +54,8 @@ public class ProductController {
 
     // Update Data To Table
     @PostMapping(path = "/update/{productId}")
-    public ResponseDto update(@PathVariable int productId, ProductDto pDto) {
+    public ResponseDto update(@PathVariable int productId, ProductDto pDto, @RequestParam("image") MultipartFile image) throws IOException {
+        pDto.setImage(image);
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
         return new ResponseDto("200", "Success Update Product",
                 productService.update((String) authUser.getPrincipal(), productId, pDto));

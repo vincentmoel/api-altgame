@@ -1,6 +1,7 @@
 package com.AltGame.AltGame.Dto;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 
@@ -12,7 +13,7 @@ public class ProductDto {
     private String name;
     private String description;
     private int price;
-    private byte image;
+    private MultipartFile image;
     private String status;
     private Date createdAt;
     private Date updatedAt;

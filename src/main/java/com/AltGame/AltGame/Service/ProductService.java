@@ -6,6 +6,7 @@ import com.AltGame.AltGame.Repository.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -29,31 +30,31 @@ public class ProductService {
         return productRepo.findByProductId(productId);
     }
 
-    public ProductEntity store(ProductDto pDto, String username) {
+    public ProductEntity store(ProductDto pDto, String username) throws IOException {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         ProductEntity pEntity = new ProductEntity();
         int userId = userService.getUserIdByUsername(username);
 
         pEntity.setUserId(userId);
-        pEntity.setImage(pDto.getImage());
+        pEntity.setImage(pDto.getImage().getBytes());
         pEntity.setProductId(pDto.getProductId());
         pEntity.setName(pDto.getName());
         pEntity.setCategoryId(pDto.getCategoryId());
         pEntity.setPrice(pDto.getPrice());
         pEntity.setDescription(pDto.getDescription());
-        pEntity.setStatus(pDto.getStatus());
+        pEntity.setStatus("active");
         pEntity.setCreatedAt(timestamp);
         pEntity.setUpdatedAt(timestamp);
 
         return productRepo.save(pEntity);
     }
 
-    public ProductEntity update(String username, int productId, ProductDto pDto) {
+    public ProductEntity update(String username, int productId, ProductDto pDto) throws IOException {
         int userId = userService.getUserIdByUsername(username);
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         ProductEntity pEntity = productRepo.findByProductIdAndUserId(productId, userId);
 
-        pEntity.setImage(pDto.getImage());
+        pEntity.setImage(pDto.getImage().getBytes());
         pEntity.setName(pDto.getName());
         pEntity.setPrice(pDto.getPrice());
         pEntity.setDescription(pDto.getDescription());
