@@ -44,7 +44,6 @@ spring.mvc.pathmatch.matching-strategy = ANT_PATH_MATCHER
     SELECT 
         u.user_id, 
         u.username, 
-        u.password,
         u.name, 
         u.email, 
         u.phone,
