@@ -2,12 +2,15 @@ package com.AltGame.AltGame.Service;
 
 import com.AltGame.AltGame.Dto.BidDto;
 import com.AltGame.AltGame.Entity.BidEntity;
+import com.AltGame.AltGame.Entity.ProductEntity;
 import com.AltGame.AltGame.Repository.BidRepo;
+import com.AltGame.AltGame.Repository.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class BidService {
@@ -15,7 +18,16 @@ public class BidService {
     BidRepo bidRepo;
 
     @Autowired
+    ProductRepo productRepo;
+
+    @Autowired
     UserService userService;
+
+    @Autowired
+    InvoiceService invoiceService;
+
+    @Autowired
+    ProductService productService;
 
     private Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
@@ -70,17 +82,36 @@ public class BidService {
         return true;
     }
 
-    public List<BidEntity> getAllBidsOnProduct(Integer productId)
+    public List<BidEntity> getAllBidsOnProduct(Integer productId, String username)
     {
-        return bidRepo.findAllByProductIdOrderByCreatedAtDesc(productId);
+        List<BidEntity> arrBid;
+        Integer userId = userService.getUserIdByUsername(username);
+
+        // Only Product's Owner can Access
+        ProductEntity product = productRepo.findByProductId(productId);
+        if(Objects.equals(product.getUserId(), userId))
+        {
+            arrBid = bidRepo.findAllByProductIdOrderByCreatedAtDesc(productId);
+            return arrBid;
+        }
+        return null;
     }
 
-    public BidEntity acceptBidBuyer(Integer productId, BidDto bidDto)
+    public boolean acceptBidBuyer(Integer bidId, BidDto bidDto, String username)
     {
-        BidEntity bid = setStatusToAccepted(bidDto.getBidId());
-        setAllStatusToDeclined(productId);
+        Integer userId = userService.getUserIdByUsername(username);
 
-        return bid;
+        // Only Product's Owner can Accept
+        ProductEntity product = productRepo.findByProductId(bidDto.getProductId());
+        if(Objects.equals(product.getUserId(), userId))
+        {
+            setStatusToAccepted(bidId);
+            setAllStatusToDeclined(bidDto.getProductId());
+            invoiceService.store(bidId);
+            productService.setProductStatus(bidDto.getProductId(), "sold");
+            return true;
+        }
+        return false;
 
     }
 
@@ -103,6 +134,4 @@ public class BidService {
         return true;
 
     }
-
-
 }

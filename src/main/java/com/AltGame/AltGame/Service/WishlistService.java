@@ -17,35 +17,36 @@ public class WishlistService {
 	@Autowired
 	UserService userService;
 
-	public List<WishlistEntity> index(String username) {
+	public List<WishlistEntity> index(String username)
+	{
 		int userId = userService.getUserIdByUsername(username);
 		return wishlistRepo.findByUserId(userId);
 	}
 
-	public WishlistEntity store(WishlistDto wishlistDto, String username) {
-
-		WishlistEntity wEntity = new WishlistEntity();
+	public WishlistEntity store(WishlistDto wishlistDto, String username)
+	{
+		WishlistEntity wishlistEntity = new WishlistEntity();
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		int userId = userService.getUserIdByUsername(username);
 
-		wEntity.setWishlistId(wishlistDto.getWishlistId());
-		wEntity.setUserId(userId);
-		wEntity.setProductId(wishlistDto.getProductId());
-		wEntity.setCreatedAt(timestamp);
-		wEntity.setUpdatedAt(timestamp);
+		wishlistEntity.setWishlistId(wishlistDto.getWishlistId());
+		wishlistEntity.setUserId(userId);
+		wishlistEntity.setProductId(wishlistDto.getProductId());
+		wishlistEntity.setCreatedAt(timestamp);
+		wishlistEntity.setUpdatedAt(timestamp);
 
-		return wishlistRepo.save(wEntity);
+		return wishlistRepo.save(wishlistEntity);
 	}
 
-	public boolean destroy(WishlistDto wishlistDto, String username) {
+	public boolean destroy(WishlistDto wishlistDto, String username)
+	{
 		int userId = userService.getUserIdByUsername(username);
-		WishlistEntity wEntity = wishlistRepo.findByWishlistIdAndUserId(wishlistDto.getWishlistId(), userId);
-		if (wEntity != null)
+		WishlistEntity wishlistEntity = wishlistRepo.findByWishlistIdAndUserId(wishlistDto.getWishlistId(), userId);
+		if (wishlistEntity != null)
 		{
 			wishlistRepo.deleteById(wishlistDto.getWishlistId());
 			return true;
 		}
-
 		return false;
 
 	}

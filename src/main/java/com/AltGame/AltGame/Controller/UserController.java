@@ -18,16 +18,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-
-
-
-
-    // Get All Data From Table
-    public void index()
-    {
-
-    }
-    @GetMapping("/get")
+    @GetMapping("/get-user")
     public ResponseDto get_user(){
         Optional<VwUserEntity> vwUserEntity = userService.get_user(userService.authentication().getName());
         if(Objects.isNull(vwUserEntity)){

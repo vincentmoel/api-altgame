@@ -4,6 +4,7 @@ import com.AltGame.AltGame.Dto.BidDto;
 import com.AltGame.AltGame.Dto.ResponseDto;
 import com.AltGame.AltGame.Entity.BidEntity;
 import com.AltGame.AltGame.Service.BidService;
+import com.AltGame.AltGame.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +20,9 @@ import java.util.Map;
 public class BidController {
     @Autowired
     BidService bidService;
+
+    @Autowired
+    UserService userService;
 
 
     // Get All Data From Table
@@ -92,20 +96,26 @@ public class BidController {
     @GetMapping(path="/all-bids-product/{productId}")
     public ResponseDto getAllBidsOnProduct(@PathVariable Integer productId)
     {
-
-        List<BidEntity> bids = bidService.getAllBidsOnProduct(productId);
-        return new ResponseDto("200","Success Update Bid", bids);
+        List<BidEntity> bids = bidService.getAllBidsOnProduct(productId, userService.authentication().getPrincipal().toString());
+        return new ResponseDto("200","Success Get All Bid On Product", bids);
 
     }
 
     // Can be access by Product Owner only
-    @PostMapping(path="/accept-bid-buyer/{productId}")
-    public ResponseDto acceptBidBuyer(@PathVariable Integer productId, @RequestBody BidDto bidDto)
+    @PostMapping(path="/accept-bid-buyer/{bidId}")
+    public ResponseDto acceptBidBuyer(@PathVariable Integer bidId, @RequestBody BidDto bidDto)
     {
+        ResponseDto responseDto;
+        boolean status = bidService.acceptBidBuyer(bidId, bidDto, userService.authentication().getPrincipal().toString());
 
-        BidEntity bid = bidService.acceptBidBuyer(productId, bidDto);
-
-        ResponseDto responseDto = new ResponseDto("200", "Success Accept Bid Buyer",bid);
+        if(status)
+        {
+            responseDto = new ResponseDto("200", "Success Accept Bid Buyer");
+        }
+        else
+        {
+            responseDto = new ResponseDto("401", "Failed Accept Bid Buyer");
+        }
 
         return responseDto;
 

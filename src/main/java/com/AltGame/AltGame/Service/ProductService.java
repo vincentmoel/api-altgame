@@ -75,4 +75,14 @@ public class ProductService {
 
         return true;
     }
+
+    public boolean setProductStatus(Integer productId, String status)
+    {
+        ProductEntity product = productRepo.findByProductId(productId);
+        product.setStatus(status);
+
+        productRepo.save(product);
+
+        return true;
+    }
 }

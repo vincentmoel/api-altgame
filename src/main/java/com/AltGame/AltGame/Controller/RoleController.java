@@ -9,22 +9,4 @@ public class RoleController {
     {
 
     }
-
-    // Save Data To Table
-    public void store()
-    {
-
-    }
-
-    // Update Data To Table
-    public void update()
-    {
-
-    }
-
-    // Delete Data From Table
-    public void destroy()
-    {
-
-    }
 }

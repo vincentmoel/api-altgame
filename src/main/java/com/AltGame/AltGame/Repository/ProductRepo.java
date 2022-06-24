@@ -18,6 +18,6 @@ public interface ProductRepo extends JpaRepository<ProductEntity, Integer> {
 
 	ProductEntity findByProductIdAndUserId(int productId, int userId);
   
-  ProductEntity findByProductId(Integer productId);
+  	ProductEntity findByProductId(Integer productId);
 
 }

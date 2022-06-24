@@ -18,7 +18,7 @@ import com.AltGame.AltGame.Service.WishlistService;
 @RequestMapping("/api/wishlists")
 public class WishlistController {
     @Autowired
-    WishlistService wService;
+    WishlistService wishlistService;
 
     // Get All Data From Table
     @GetMapping("/index")
@@ -26,24 +26,24 @@ public class WishlistController {
 
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
         Map<String, List<WishlistEntity>> mapWishlists = new HashMap<>();
-        mapWishlists.put("wishlists", wService.index((String) authUser.getPrincipal()));
+        mapWishlists.put("wishlists", wishlistService.index((String) authUser.getPrincipal()));
         return new ResponseDto("200", "Success Find Wishlists", mapWishlists);
     }
 
     // Save Data To Table
     @PostMapping("/store")
-    public ResponseDto store(@RequestBody WishlistDto wDto) {
+    public ResponseDto store(@RequestBody WishlistDto wishlistDto) {
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
         return new ResponseDto("200", "Success Store Wishlist",
-                wService.store(wDto, (String) authUser.getPrincipal()));
+                wishlistService.store(wishlistDto, (String) authUser.getPrincipal()));
     }
 
     // Delete Data From Table
     @PostMapping("/destroy")
-    public ResponseDto destroy(@RequestBody WishlistDto wDto) {
+    public ResponseDto destroy(@RequestBody WishlistDto wishlistDto) {
         ResponseDto responseDto;
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
-        boolean destroyStatus = wService.destroy(wDto, (String) authUser.getPrincipal());
+        boolean destroyStatus = wishlistService.destroy(wishlistDto, (String) authUser.getPrincipal());
 
         if(destroyStatus)
         {

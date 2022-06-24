@@ -21,14 +21,8 @@ public class InvoiceController {
 
     }
 
-    // Save Data To Table
-    public void store()
-    {
-
-    }
-
     // Update Data To Table
-    @PutMapping("/pay")
+    @PostMapping("/pay")
     public ResponseDto update(InvoiceDto invoiceDto, @RequestParam("image") MultipartFile image) throws IOException {
         invoiceDto.setImage(image);
         if(invoiceService.exitsByInvoiceId(invoiceDto.getInvoiceId())){

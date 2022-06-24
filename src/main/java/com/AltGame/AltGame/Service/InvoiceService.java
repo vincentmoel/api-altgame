@@ -17,13 +17,6 @@ public class InvoiceService {
     @Autowired
     InvoiceRepo invoiceRepo;
 
-    public void update(InvoiceDto invoiceDto) throws IOException {
-        InvoiceEntity invoiceEntity = invoiceRepo.findById(invoiceDto.getInvoiceId().intValue());
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        invoiceEntity.setImage(invoiceDto.getImage().getBytes());
-        invoiceEntity.setUpdatedAt(timestamp);
-        invoiceRepo.save(invoiceEntity);
-    }
     public boolean store(Integer bidId){
         if(invoiceRepo.existsById(bidId)){
             return false;
@@ -34,7 +27,7 @@ public class InvoiceService {
         if(invoiceRepo.count() == 0){
             invoiceEntity.setNoInvoice("INV-"+dateNowFormatYMD()+"-00001");
         }else{
-            invoiceEntity.setNoInvoice(genrate_noInvoice());
+            invoiceEntity.setNoInvoice(generate_noInvoice());
         }
         invoiceEntity.setCreatedAt(timestamp);
         invoiceEntity.setUpdatedAt(timestamp);
@@ -42,20 +35,28 @@ public class InvoiceService {
         invoiceRepo.save(invoiceEntity);
         return true;
     }
-    public String genrate_noInvoice(){
+    public void update(InvoiceDto invoiceDto) throws IOException {
+        InvoiceEntity invoiceEntity = invoiceRepo.findById(invoiceDto.getInvoiceId().intValue());
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        invoiceEntity.setImage(invoiceDto.getImage().getBytes());
+        invoiceEntity.setUpdatedAt(timestamp);
+        invoiceRepo.save(invoiceEntity);
+    }
+
+    public String generate_noInvoice(){
         String lastNoIncoice = invoiceRepo.lastNoInvoice();
         String[] last =  lastNoIncoice.split("-");
-        String[] noInvoce = new String[3];
+        String[] noInvoice = new String[3];
 
-        noInvoce[0] = "INV";
-        noInvoce[1] = dateNowFormatYMD();
-        if(noInvoce[1].equals(last[1])){
+        noInvoice[0] = "INV";
+        noInvoice[1] = dateNowFormatYMD();
+        if(noInvoice[1].equals(last[1])){
             int ai = Integer.parseInt(last[2]) + 1;
-            noInvoce[2] = String.format("%05d",ai);
-            return String.join("-", noInvoce);
+            noInvoice[2] = String.format("%05d",ai);
+            return String.join("-", noInvoice);
         }
-        noInvoce[2] = "00001";
-        return String.join("-", noInvoce);
+        noInvoice[2] = "00001";
+        return String.join("-", noInvoice);
     }
     public String dateNowFormatYMD(){
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
