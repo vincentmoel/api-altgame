@@ -7,12 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.AltGame.AltGame.Dto.ResponseDto;
 import com.AltGame.AltGame.Dto.WishlistDto;
@@ -26,34 +21,39 @@ public class WishlistController {
     WishlistService wService;
 
     // Get All Data From Table
-    @GetMapping("/index/{userId}")
-    public ResponseDto index(@PathVariable("userId") int userId) {
+    @GetMapping("/index")
+    public ResponseDto index() {
 
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
         Map<String, List<WishlistEntity>> mapWishlists = new HashMap<>();
-        mapWishlists.put("wishlist", wService.index((String) authUser.getPrincipal()));
-        ResponseDto responseDto = new ResponseDto("200", "Success Find Wishlists", mapWishlists);
-        return responseDto;
+        mapWishlists.put("wishlists", wService.index((String) authUser.getPrincipal()));
+        return new ResponseDto("200", "Success Find Wishlists", mapWishlists);
     }
 
     // Save Data To Table
     @PostMapping("/store")
-    public ResponseDto store(WishlistDto wDto) {
+    public ResponseDto store(@RequestBody WishlistDto wDto) {
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
-        ResponseDto responseDto = new ResponseDto("200", "Success Store Wishlist",
+        return new ResponseDto("200", "Success Store Wishlist",
                 wService.store(wDto, (String) authUser.getPrincipal()));
-        return responseDto;
-    }
-
-    // Update Data To Table
-    public void update() {
-
     }
 
     // Delete Data From Table
-    @DeleteMapping("/destroy")
-    public ResponseDto destroy(int wId) {
-        ResponseDto responseDto = new ResponseDto("200", "Success Destroy Wishlist", wService.destroy(wId));
+    @PostMapping("/destroy")
+    public ResponseDto destroy(@RequestBody WishlistDto wDto) {
+        ResponseDto responseDto;
+        Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
+        boolean destroyStatus = wService.destroy(wDto, (String) authUser.getPrincipal());
+
+        if(destroyStatus)
+        {
+            responseDto = new ResponseDto("200", "Success Destroy Wishlist");
+        }
+        else
+        {
+            responseDto = new ResponseDto("204", "Failed Destroy Wishlist");
+        }
+
         return responseDto;
     }
 }

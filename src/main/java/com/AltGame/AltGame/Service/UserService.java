@@ -50,12 +50,12 @@ public class UserService {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         user.setUsername(userDto.getUsername());
         user.setName(userDto.getName());
-        user.setImage(userDto.getImg().getBytes());
+        user.setImage(userDto.getImage().getBytes());
         user.setEmail(userDto.getEmail());
         user.setPhone(userDto.getPhone());
         user.setUpdatedAt(timestamp);
-        if(userDto.getImg().getSize() > 0){
-            user.setImage(userDto.getImg().getBytes());
+        if(userDto.getImage().getSize() > 0){
+            user.setImage(userDto.getImage().getBytes());
         }
         if(userDto.getPassword().length() > 0){
             user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
@@ -68,6 +68,7 @@ public class UserService {
     }
 
     public Optional<VwUserEntity> get_user(String username){
+        Optional<VwUserEntity> vwUserEntity = vwUserRepo.findByUsername(username);
         return vwUserRepo.findByUsername(username);
     }
 

@@ -23,6 +23,7 @@ public class WishlistService {
 	}
 
 	public WishlistEntity store(WishlistDto wishlistDto, String username) {
+
 		WishlistEntity wEntity = new WishlistEntity();
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		int userId = userService.getUserIdByUsername(username);
@@ -36,11 +37,17 @@ public class WishlistService {
 		return wishlistRepo.save(wEntity);
 	}
 
-	public List<WishlistEntity> destroy(int wishlistId) {
-		WishlistEntity wEntity = wishlistRepo.findByWishlistId(wishlistId);
+	public boolean destroy(WishlistDto wishlistDto, String username) {
+		int userId = userService.getUserIdByUsername(username);
+		WishlistEntity wEntity = wishlistRepo.findByWishlistIdAndUserId(wishlistDto.getWishlistId(), userId);
 		if (wEntity != null)
-			wishlistRepo.deleteById(wishlistId);
-		return wishlistRepo.findAll();
+		{
+			wishlistRepo.deleteById(wishlistDto.getWishlistId());
+			return true;
+		}
+
+		return false;
+
 	}
 
 }

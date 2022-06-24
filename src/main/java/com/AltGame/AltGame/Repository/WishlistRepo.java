@@ -11,7 +11,7 @@ import javax.transaction.Transactional;
 @Repository
 @Transactional
 public interface WishlistRepo extends JpaRepository<WishlistEntity, Integer> {
-	WishlistEntity findByWishlistId(int wishlistId);
+	WishlistEntity findByWishlistIdAndUserId(int wishlistId, int userId);
 
 	List<WishlistEntity> findByUserId(int userId);
 }
