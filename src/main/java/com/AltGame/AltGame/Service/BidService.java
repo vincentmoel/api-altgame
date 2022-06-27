@@ -108,7 +108,7 @@ public class BidService {
             setStatusToAccepted(bidId);
             setAllStatusToDeclined(bidDto.getProductId());
             invoiceService.store(bidId);
-            productService.setProductStatus(bidDto.getProductId(), "sold");
+            productService.setProductStatus(bidDto.getProductId(), "waiting");
             return true;
         }
         return false;
