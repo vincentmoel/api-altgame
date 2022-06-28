@@ -93,6 +93,7 @@ public class BidController {
     }
 
     // Can be access by Product Owner only
+    // Show all bids from product
     @GetMapping(path="/all-bids-product/{productId}")
     public ResponseDto getAllBidsOnProduct(@PathVariable Integer productId)
     {
@@ -103,10 +104,10 @@ public class BidController {
 
     // Can be access by Product Owner only
     @PostMapping(path="/accept-bid-buyer/{bidId}")
-    public ResponseDto acceptBidBuyer(@PathVariable Integer bidId, @RequestBody BidDto bidDto)
+    public ResponseDto acceptBidBuyer(@PathVariable Integer bidId)
     {
         ResponseDto responseDto;
-        boolean status = bidService.acceptBidBuyer(bidId, bidDto, userService.authentication().getPrincipal().toString());
+        boolean status = bidService.acceptBidBuyer(bidId, userService.authentication().getPrincipal().toString());
 
         if(status)
         {

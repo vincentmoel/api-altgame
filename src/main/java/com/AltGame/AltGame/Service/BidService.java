@@ -75,9 +75,8 @@ public class BidService {
         Integer userId = userService.getUserIdByUsername(username);
 
         BidEntity bid = bidRepo.findByBidIdAndUserId(bidId, userId);
-        bid.setDeletedAt(timestamp);
 
-        bidRepo.save(bid);
+        bidRepo.deleteById(bid.getBidId());
 
         return true;
     }
@@ -97,18 +96,19 @@ public class BidService {
         return null;
     }
 
-    public boolean acceptBidBuyer(Integer bidId, BidDto bidDto, String username)
+    public boolean acceptBidBuyer(Integer bidId, String username)
     {
         Integer userId = userService.getUserIdByUsername(username);
 
         // Only Product's Owner can Accept
-        ProductEntity product = productRepo.findByProductId(bidDto.getProductId());
+        BidEntity bid = bidRepo.findByBidId(bidId);
+        ProductEntity product = productRepo.findByProductId(bid.getProductId());
         if(Objects.equals(product.getUserId(), userId))
         {
             setStatusToAccepted(bidId);
-            setAllStatusToDeclined(bidDto.getProductId());
+            setAllStatusToDeclined(bid.getProductId());
             invoiceService.store(bidId);
-            productService.setProductStatus(bidDto.getProductId(), "waiting");
+            productService.setProductStatus(bid.getProductId(), "waiting");
             return true;
         }
         return false;
