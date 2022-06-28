@@ -47,9 +47,8 @@ public class ProductController {
     public ResponseDto store(ProductDto pDto, @RequestParam("image") MultipartFile image) throws IOException {
         pDto.setImage(image);
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
-
-        return new ResponseDto("200", "Success Store Product",
-                productService.store(pDto, (String) authUser.getPrincipal()));
+        productService.store(pDto, (String) authUser.getPrincipal());
+        return new ResponseDto("200", "Success Store Product");
     }
 
     // Update Data To Table
@@ -57,8 +56,7 @@ public class ProductController {
     public ResponseDto update(@PathVariable int productId, ProductDto pDto, @RequestParam("image") MultipartFile image) throws IOException {
         pDto.setImage(image);
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
-        return new ResponseDto("200", "Success Update Product",
-                productService.update((String) authUser.getPrincipal(), productId, pDto));
+        return new ResponseDto("200", "Success Update Product", productService.update((String) authUser.getPrincipal(), productId, pDto));
     }
 
     // Delete Data From Table

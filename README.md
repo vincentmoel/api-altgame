@@ -39,7 +39,7 @@ spring.mvc.pathmatch.matching-strategy = ANT_PATH_MATCHER
 
 - vw_users
 
-```
+```roomsql
     CREATE VIEW vw_users AS
     SELECT 
         u.user_id, 
@@ -51,19 +51,108 @@ spring.mvc.pathmatch.matching-strategy = ANT_PATH_MATCHER
         u.image,
         r.name AS role
     FROM 
-        users AS u, 
-        roles AS r
+        users u, 
+        roles r
     WHERE u.role_id = r.role_id;
+```
+- vw_products
+```roomsql
+CREATE VIEW vw_products AS
+    SELECT 
+        p.product_id, 
+        u.username, 
+        c.name AS category, 
+        p.name, 
+        p.price,
+        p.image,
+        p.status,
+        p.created_at,
+		p.updated_at
+    FROM 
+        products p, 
+        categories c,
+		users u
+    WHERE 
+	p.category_id = c.category_id AND
+	p.user_id = u.user_id
+```
+- vw_invoices (Maintenance)
+```roomsql
+CREATE VIEW vw_invoices AS
+SELECT 
+	i.invoice_id
+	p.username AS seller,
+	b.user_id AS buyer,
+	p.name AS product,
+	p.price AS product_price,
+	b.price AS bid_price,
+	i.status
+	 
+FROM
+	products p,
+	bids b,
+	invoices i,
+	users u
+WHERE
+	p.product_id = b.product_id AND
+	b.bid_id = i.bid_id AND
+	u.user_id = p.user_id;
+
 ```
 
 # Roles Table
 ```json
 {
-    "roleid":1,
-    "name" : "buyer"
+    "roleid"  : 1,
+    "name"    : "buyer"
 },
 {
-    "roleid":2,
-    "name" : "seller"
+    "roleid"  : 2,
+    "name"    : "seller"
+}
+```
+# Categories Table
+```json
+{
+  "categoryId"  : 1,
+  "name"        : "Console",
+  "created_at"  : "2022-06-24 00:00:00",
+  "updated_at"  : "2022-06-24 00:00:00"
 },
+{
+"categoryId"  : 2,
+"name"        : "Video Game",
+"created_at"  : "2022-06-24 00:00:00",
+"updated_at"  : "2022-06-24 00:00:00"
+},
+{
+"categoryId"  : 3,
+"name"        : "Controller",
+"created_at"  : "2022-06-24 00:00:00",
+"updated_at"  : "2022-06-24 00:00:00"
+},
+{
+"categoryId"  : 4,
+"name"        : "Aksersoris",
+"created_at"  : "2022-06-24 00:00:00",
+"updated_at"  : "2022-06-24 00:00:00"
+},
+{
+"categoryId"  : 5,
+"name"        : "Board Game",
+"created_at"  : "2022-06-24 00:00:00",
+"updated_at"  : "2022-06-24 00:00:00"
+},
+{
+"categoryId"  : 6,
+"name"        : "Collectible",
+"created_at"  : "2022-06-24 00:00:00",
+"updated_at"  : "2022-06-24 00:00:00"
+},
+{
+"categoryId"  : 7,
+"name"        : "Other",
+"created_at"  : "2022-06-24 00:00:00",
+"updated_at"  : "2022-06-24 00:00:00"
+}
 ```

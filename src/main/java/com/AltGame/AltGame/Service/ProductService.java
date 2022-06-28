@@ -2,7 +2,9 @@ package com.AltGame.AltGame.Service;
 
 import com.AltGame.AltGame.Dto.ProductDto;
 import com.AltGame.AltGame.Entity.ProductEntity;
+import com.AltGame.AltGame.Entity.VwProductEntity;
 import com.AltGame.AltGame.Repository.ProductRepo;
+import com.AltGame.AltGame.Repository.VwProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +18,12 @@ public class ProductService {
     ProductRepo productRepo;
     @Autowired
     UserService userService;
+    @Autowired
+    VwProductRepo vwProductRepo;
 
-    public List<ProductEntity> index() {
-        return productRepo.findAll();
+
+    public List<VwProductEntity> index() {
+        return vwProductRepo.findAll();
     }
 
     public List<ProductEntity> showUserProducts(String username) {
@@ -30,11 +35,10 @@ public class ProductService {
         return productRepo.findByProductId(productId);
     }
 
-    public ProductEntity store(ProductDto pDto, String username) throws IOException {
+    public void store(ProductDto pDto, String username) throws IOException {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         ProductEntity pEntity = new ProductEntity();
         int userId = userService.getUserIdByUsername(username);
-
         pEntity.setUserId(userId);
         pEntity.setImage(pDto.getImage().getBytes());
         pEntity.setProductId(pDto.getProductId());
@@ -45,8 +49,6 @@ public class ProductService {
         pEntity.setStatus("active");
         pEntity.setCreatedAt(timestamp);
         pEntity.setUpdatedAt(timestamp);
-
-        return productRepo.save(pEntity);
     }
 
     public ProductEntity update(String username, int productId, ProductDto pDto) throws IOException {

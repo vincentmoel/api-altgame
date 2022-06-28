@@ -85,4 +85,9 @@ public class UserService {
     public Optional<RoleEntity> role(Integer idRole){
         return roleRepo.findById(idRole);
     }
+
+    public byte[] get_image(String username) {
+        UserEntity userEntity = userRepo.findByUsername(username);
+        return userEntity.getImage();
+    }
 }
