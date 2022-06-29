@@ -23,16 +23,15 @@ public class ProductService {
 
 
     public List<VwProductEntity> index() {
-        return vwProductRepo.findAll();
+        return vwProductRepo.findAllByStatus("active");
     }
 
     public List<VwProductEntity> searchByName(String search){
-        return vwProductRepo.findByNameLike("%"+search+"%");
+        return vwProductRepo.findByStatusAndNameLike("active","%"+search+"%");
     }
 
-    public List<ProductEntity> showUserProducts(String username) {
-        int userId = userService.getUserIdByUsername(username);
-        return productRepo.findByUserId(userId);
+    public List<VwProductEntity> showUserProducts(String username) {
+        return vwProductRepo.findByStatusAndUsername("active", username);
     }
 
     public ProductEntity show(int productId) {

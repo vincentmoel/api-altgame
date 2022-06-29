@@ -3,6 +3,7 @@ package com.AltGame.AltGame.Controller;
 import com.AltGame.AltGame.Dto.ProductDto;
 import com.AltGame.AltGame.Dto.ResponseDto;
 import com.AltGame.AltGame.Entity.ProductEntity;
+import com.AltGame.AltGame.Entity.VwProductEntity;
 import com.AltGame.AltGame.Service.ProductService;
 
 import java.io.IOException;
@@ -35,7 +36,7 @@ public class ProductController {
     // Show All User Products
     @GetMapping(path = "/{username}")
     public ResponseDto showUserProducts(@PathVariable String username) {
-        Map<String, List<ProductEntity>> mapProducts = new HashMap<>();
+        Map<String, List<VwProductEntity>> mapProducts = new HashMap<>();
         mapProducts.put("products", productService.showUserProducts(username));
         return new ResponseDto("200", "Success Show User Products", mapProducts);
     }

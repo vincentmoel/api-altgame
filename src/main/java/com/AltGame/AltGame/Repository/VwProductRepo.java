@@ -11,6 +11,8 @@ import java.util.List;
 @Repository
 @Transactional
 public interface VwProductRepo extends JpaRepository<VwProductEntity, Integer> {
+    List<VwProductEntity> findAllByStatus(String status);
 
-    List<VwProductEntity> findByNameLike(String search);
+    List<VwProductEntity> findByStatusAndNameLike(String status, String search);
+    List<VwProductEntity> findByStatusAndUsername(String status, String username);
 }

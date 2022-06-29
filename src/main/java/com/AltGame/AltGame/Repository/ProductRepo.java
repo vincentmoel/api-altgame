@@ -12,6 +12,8 @@ import javax.transaction.Transactional;
 @Transactional
 public interface ProductRepo extends JpaRepository<ProductEntity, Integer> {
 
+	List<ProductEntity> findAllByStatus(String status);
+
 	List<ProductEntity> findByUserId(int userId);
 
 	ProductEntity findByProductId(int productId);
