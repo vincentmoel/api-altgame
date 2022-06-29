@@ -80,24 +80,31 @@ CREATE VIEW vw_products AS
 ```roomsql
 CREATE VIEW vw_invoices AS
 SELECT 
-	i.invoice_id
-	p.username AS seller,
-	b.user_id AS buyer,
-	p.name AS product,
-	p.price AS product_price,
+	i.invoice_id, 
+	i.no_invoice,
+	i.address,
+	i.status,
+	i.created_at,
+	i.updated_at, 
 	b.price AS bid_price,
-	i.status
-	 
-FROM
-	products p,
-	bids b,
-	invoices i,
-	users u
-WHERE
-	p.product_id = b.product_id AND
-	b.bid_id = i.bid_id AND
-	u.user_id = p.user_id;
+	(SELECT username FROM users WHERE users.user_id = b.user_id) AS buyer , 
+	p.name, 
+	p.price AS product_price, 
+	p.image, 
+	(SELECT username FROM users WHERE users.user_id = p.user_id) AS seller
 
+
+
+FROM 
+	invoices i,
+	bids b,
+	products p
+
+WHERE 
+
+i.bid_id = b.bid_id AND
+b.product_id = p.product_id AND
+b.status = 'accepted'
 ```
 
 # Roles Table

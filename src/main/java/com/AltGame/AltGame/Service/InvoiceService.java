@@ -2,7 +2,10 @@ package com.AltGame.AltGame.Service;
 
 import com.AltGame.AltGame.Dto.InvoiceDto;
 import com.AltGame.AltGame.Entity.InvoiceEntity;
+import com.AltGame.AltGame.Entity.VwInvoiceEntity;
+import com.AltGame.AltGame.Entity.VwUserEntity;
 import com.AltGame.AltGame.Repository.InvoiceRepo;
+import com.AltGame.AltGame.Repository.VwInvoiceRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +14,16 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class InvoiceService {
     @Autowired
     InvoiceRepo invoiceRepo;
+    @Autowired
+    VwInvoiceRepo vwInvoiceRepo;
 
     public boolean store(Integer bidId){
         if(invoiceRepo.existsById(bidId)){
@@ -65,5 +73,12 @@ public class InvoiceService {
     }
     public boolean exitsByInvoiceId(Integer invoiceId){
         return invoiceRepo.existsById(invoiceId);
+    }
+
+    public List<VwInvoiceEntity> index(Optional<VwUserEntity> vwUserEntity) {
+        if(Objects.equals(vwUserEntity.get().getRole(), "buyer")){
+            return vwInvoiceRepo.findByBuyer(vwUserEntity.get().getUsername());
+        }
+        return vwInvoiceRepo.findBySellerOrBuyer(vwUserEntity.get().getUsername(),vwUserEntity.get().getUsername());
     }
 }
