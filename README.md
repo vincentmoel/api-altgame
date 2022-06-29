@@ -76,7 +76,7 @@ CREATE VIEW vw_products AS
 	p.category_id = c.category_id AND
 	p.user_id = u.user_id
 ```
-- vw_invoices (Maintenance)
+- vw_invoices
 ```roomsql
 CREATE VIEW vw_invoices AS
 SELECT 
