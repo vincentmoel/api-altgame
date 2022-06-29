@@ -27,7 +27,11 @@ public class ProductController {
     public ResponseDto index() {
         return new ResponseDto("200", "Success Index Products", productService.index());
     }
-
+    // Search Product
+    @GetMapping(path = "")
+    public ResponseDto serachProduct(@RequestParam(name = "search") String search){
+        return new ResponseDto("200","Success Search",productService.searchByName(search));
+    }
     // Show All User Products
     @GetMapping(path = "/products/{username}")
     public ResponseDto showUserProducts(@PathVariable String username) {

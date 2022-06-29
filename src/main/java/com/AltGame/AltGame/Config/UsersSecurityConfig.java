@@ -35,10 +35,10 @@ public class UsersSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers("/api/login/**").permitAll();
-        http.authorizeRequests().antMatchers("/api/signup", "/swagger-ui.html/**","/refresh-token","/api/products/","/api/bids/**").permitAll();
+        http.authorizeRequests().antMatchers("/api/signup", "/swagger-ui.html/**","/refresh-token","/api/products/index","/api/products","/api/bids/**").permitAll();
 //        http.authorizeRequests().antMatchers("/api/bids/**").hasAnyAuthority("buyer");
 //        http.authorizeRequests().antMatchers("/api/products/**").hasAnyAuthority("seller");
-        http.authorizeRequests().antMatchers( "/api/users/**").hasAnyAuthority("buyer","seller");
+        http.authorizeRequests().antMatchers( "/api/**").hasAnyAuthority("buyer","seller");
         http.authorizeRequests().anyRequest().authenticated();
 
         RefreshToken refreshToken = new RefreshToken(authenticationManagerBean()); //customize url login

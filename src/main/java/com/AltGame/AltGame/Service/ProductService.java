@@ -26,6 +26,10 @@ public class ProductService {
         return vwProductRepo.findAll();
     }
 
+    public List<VwProductEntity> searchByName(String search){
+        return vwProductRepo.findByNameLike("%"+search+"%");
+    }
+
     public List<ProductEntity> showUserProducts(String username) {
         int userId = userService.getUserIdByUsername(username);
         return productRepo.findByUserId(userId);

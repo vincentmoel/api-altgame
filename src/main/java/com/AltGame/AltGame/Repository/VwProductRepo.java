@@ -12,4 +12,5 @@ import java.util.List;
 @Transactional
 public interface VwProductRepo extends JpaRepository<VwProductEntity, Integer> {
 
+    List<VwProductEntity> findByNameLike(String search);
 }
