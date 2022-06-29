@@ -53,6 +53,7 @@ public class ProductService {
         pEntity.setStatus("active");
         pEntity.setCreatedAt(timestamp);
         pEntity.setUpdatedAt(timestamp);
+        productRepo.save(pEntity);
     }
 
     public ProductEntity update(String username, int productId, ProductDto pDto) throws IOException {
