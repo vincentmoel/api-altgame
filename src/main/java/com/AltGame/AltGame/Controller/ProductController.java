@@ -29,14 +29,14 @@ public class ProductController {
     }
     // Search Product
     @GetMapping(path = "")
-    public ResponseDto serachProduct(@RequestParam(name = "search") String search){
+    public ResponseDto searchProducts(@RequestParam(name = "search") String search){
         return new ResponseDto("200","Success Search",productService.searchByName(search));
     }
     // Show All User Products
     @GetMapping(path = "/products/{username}")
     public ResponseDto showUserProducts(@PathVariable String username) {
         Map<String, List<ProductEntity>> mapProducts = new HashMap<>();
-        mapProducts.put("product", productService.showUserProducts(username));
+        mapProducts.put("products", productService.showUserProducts(username));
         return new ResponseDto("200", "Success Show User Products", mapProducts);
     }
 
