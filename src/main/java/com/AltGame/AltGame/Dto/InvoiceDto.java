@@ -12,6 +12,7 @@ public class InvoiceDto {
     private int bidId;
     private String noInvoice;
     private String status;
+    private String address;
     private MultipartFile image;
     private Date createdAt;
     private Date updatedAt;

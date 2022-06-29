@@ -38,6 +38,7 @@ public class InvoiceService {
     public void update(InvoiceDto invoiceDto) throws IOException {
         InvoiceEntity invoiceEntity = invoiceRepo.findById(invoiceDto.getInvoiceId().intValue());
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        invoiceEntity.setAddress(invoiceDto.getAddress());
         invoiceEntity.setImage(invoiceDto.getImage().getBytes());
         invoiceEntity.setUpdatedAt(timestamp);
         invoiceRepo.save(invoiceEntity);
