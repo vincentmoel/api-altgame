@@ -24,6 +24,9 @@ public class InvoiceEntity {
     @Column(name="status")
     private String status;
 
+    @Column(name = "address")
+    private String address;
+
     @Lob
     @Column(name="image")
     private byte[] image;
