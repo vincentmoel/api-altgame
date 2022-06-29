@@ -33,7 +33,7 @@ public class ProductController {
         return new ResponseDto("200","Success Search",productService.searchByName(search));
     }
     // Show All User Products
-    @GetMapping(path = "/products/{username}")
+    @GetMapping(path = "/{username}")
     public ResponseDto showUserProducts(@PathVariable String username) {
         Map<String, List<ProductEntity>> mapProducts = new HashMap<>();
         mapProducts.put("products", productService.showUserProducts(username));
