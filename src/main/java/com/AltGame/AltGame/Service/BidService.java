@@ -4,6 +4,7 @@ import com.AltGame.AltGame.Dto.BidDto;
 import com.AltGame.AltGame.Entity.BidEntity;
 import com.AltGame.AltGame.Entity.ProductEntity;
 import com.AltGame.AltGame.Repository.BidRepo;
+import com.AltGame.AltGame.Repository.InvoiceRepo;
 import com.AltGame.AltGame.Repository.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,9 @@ public class BidService {
     ProductRepo productRepo;
 
     @Autowired
+    InvoiceRepo invoiceRepo;
+
+    @Autowired
     UserService userService;
 
     @Autowired
@@ -28,6 +32,9 @@ public class BidService {
 
     @Autowired
     ProductService productService;
+
+    @Autowired
+    NotificationService notificationService;
 
     private Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
@@ -109,6 +116,8 @@ public class BidService {
             setAllStatusToDeclined(bid.getProductId());
             invoiceService.store(bidId);
             productService.setProductStatus(bid.getProductId(), "waiting");
+            notificationService.store(invoiceRepo.lastInvoiceId());
+
             return true;
         }
         return false;
@@ -119,7 +128,7 @@ public class BidService {
     {
         BidEntity bid = bidRepo.findByBidId(bidId);
         bid.setStatus("accepted");
-        bid.setUpdatedAt(timestamp);
+        bid.setAcceptedAt(timestamp);
         return bid;
     }
 
