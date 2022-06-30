@@ -66,9 +66,8 @@ public class RefreshToken extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-
         response.setContentType(APPLICATION_JSON_VALUE);
-        new ObjectMapper().writeValue(response.getOutputStream(), new ResponseDto("400","Failed Login"));
+        new ObjectMapper().writeValue(response.getOutputStream(), new ResponseDto("401","Failed Login"));
     }
 
     @Override
