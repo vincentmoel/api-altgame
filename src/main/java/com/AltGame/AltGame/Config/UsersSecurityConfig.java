@@ -45,9 +45,7 @@ public class UsersSecurityConfig extends WebSecurityConfigurerAdapter {
         refreshToken.setFilterProcessesUrl("/api/login"); //customize url login
         http.addFilter(refreshToken);//customize url login
 
-
         http.addFilterBefore(new CustomeAuthorFillter(), UsernamePasswordAuthenticationFilter.class);
-        http.addFilter(new RefreshToken(authenticationManagerBean()));
     }
 
     @Override
