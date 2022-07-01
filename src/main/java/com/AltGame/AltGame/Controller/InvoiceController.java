@@ -26,9 +26,10 @@ public class InvoiceController {
     }
 
     // Update Data To Table
-    @PostMapping("/pay")
-    public ResponseDto update(InvoiceDto invoiceDto, @RequestParam("image") MultipartFile image) throws IOException {
+    @PostMapping("/pay/{id}")
+    public ResponseDto update(InvoiceDto invoiceDto, @RequestParam("image") MultipartFile image, @PathVariable Integer id) throws IOException {
         invoiceDto.setImage(image);
+        invoiceDto.setInvoiceId(id);
         if(invoiceService.exitsByInvoiceId(invoiceDto.getInvoiceId())){
             invoiceService.update(invoiceDto);
             return new ResponseDto("200","Succes Pay");

@@ -1,9 +1,11 @@
 package com.AltGame.AltGame.Service;
 
 import com.AltGame.AltGame.Dto.InvoiceDto;
+import com.AltGame.AltGame.Entity.BidEntity;
 import com.AltGame.AltGame.Entity.InvoiceEntity;
 import com.AltGame.AltGame.Entity.VwInvoiceEntity;
 import com.AltGame.AltGame.Entity.VwUserEntity;
+import com.AltGame.AltGame.Repository.BidRepo;
 import com.AltGame.AltGame.Repository.InvoiceRepo;
 import com.AltGame.AltGame.Repository.VwInvoiceRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,10 @@ public class InvoiceService {
     InvoiceRepo invoiceRepo;
     @Autowired
     VwInvoiceRepo vwInvoiceRepo;
+    @Autowired
+    ProductService productService;
+    @Autowired
+    BidRepo bidRepo;
 
     public boolean store(Integer bidId){
         if(invoiceRepo.existsById(bidId)){
@@ -47,8 +53,11 @@ public class InvoiceService {
         InvoiceEntity invoiceEntity = invoiceRepo.findById(invoiceDto.getInvoiceId().intValue());
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         invoiceEntity.setAddress(invoiceDto.getAddress());
+        invoiceEntity.setStatus("paid");
         invoiceEntity.setImage(invoiceDto.getImage().getBytes());
         invoiceEntity.setUpdatedAt(timestamp);
+        BidEntity bidEntity = bidRepo.findByBidId(invoiceEntity.getBidId());
+        productService.setProductStatus(bidEntity.getProductId(), "sold");
         invoiceRepo.save(invoiceEntity);
     }
 
