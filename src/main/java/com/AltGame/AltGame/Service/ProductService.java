@@ -21,13 +21,12 @@ public class ProductService {
     @Autowired
     VwProductRepo vwProductRepo;
 
-
     public List<VwProductEntity> index() {
         return vwProductRepo.findAllByStatus("active");
     }
 
-    public List<VwProductEntity> searchByName(String search){
-        return vwProductRepo.findByStatusAndNameLike("active","%"+search+"%");
+    public List<VwProductEntity> searchByName(String search) {
+        return vwProductRepo.findByStatusAndNameLike("active", "%" + search + "%");
     }
 
     public List<VwProductEntity> showUserProducts(String username) {
@@ -61,6 +60,7 @@ public class ProductService {
         ProductEntity pEntity = productRepo.findByProductIdAndUserId(productId, userId);
 
         pEntity.setImage(pDto.getImage().getBytes());
+        pEntity.setCategoryId(pDto.getCategoryId());
         pEntity.setName(pDto.getName());
         pEntity.setPrice(pDto.getPrice());
         pEntity.setDescription(pDto.getDescription());
@@ -82,8 +82,7 @@ public class ProductService {
         return true;
     }
 
-    public boolean setProductStatus(Integer productId, String status)
-    {
+    public boolean setProductStatus(Integer productId, String status) {
         ProductEntity product = productRepo.findByProductId(productId);
         product.setStatus(status);
 

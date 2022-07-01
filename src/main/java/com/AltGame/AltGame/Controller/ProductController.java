@@ -28,11 +28,13 @@ public class ProductController {
     public ResponseDto index() {
         return new ResponseDto("200", "Success Index Products", productService.index());
     }
+
     // Search Product
     @GetMapping(path = "")
-    public ResponseDto searchProducts(@RequestParam(name = "search") String search){
-        return new ResponseDto("200","Success Search",productService.searchByName(search));
+    public ResponseDto searchProducts(@RequestParam(name = "search") String search) {
+        return new ResponseDto("200", "Success Search", productService.searchByName(search));
     }
+
     // Show All User Products
     @GetMapping(path = "/{username}")
     public ResponseDto showUserProducts(@PathVariable String username) {
@@ -58,10 +60,12 @@ public class ProductController {
 
     // Update Data To Table
     @PostMapping(path = "/update/{productId}")
-    public ResponseDto update(@PathVariable int productId, ProductDto pDto, @RequestParam("image") MultipartFile image) throws IOException {
+    public ResponseDto update(@PathVariable int productId, ProductDto pDto, @RequestParam("image") MultipartFile image)
+            throws IOException {
         pDto.setImage(image);
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
-        return new ResponseDto("200", "Success Update Product", productService.update((String) authUser.getPrincipal(), productId, pDto));
+        return new ResponseDto("200", "Success Update Product",
+                productService.update((String) authUser.getPrincipal(), productId, pDto));
     }
 
     // Delete Data From Table
