@@ -50,7 +50,7 @@ public class InvoiceService {
         return true;
     }
     public void update(InvoiceDto invoiceDto) throws IOException {
-        InvoiceEntity invoiceEntity = invoiceRepo.findById(invoiceDto.getInvoiceId().intValue());
+        InvoiceEntity invoiceEntity = invoiceRepo.findByNoInvoice(invoiceDto.getNoInvoice());
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         invoiceEntity.setAddress(invoiceDto.getAddress());
         invoiceEntity.setStatus("paid");
@@ -80,8 +80,8 @@ public class InvoiceService {
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         return dateFormat.format(new Date());
     }
-    public boolean exitsByInvoiceId(Integer invoiceId){
-        return invoiceRepo.existsById(invoiceId);
+    public boolean exitsByNoInvoice(String noInvoice){
+        return invoiceRepo.existsByNoInvoice(noInvoice);
     }
 
     public List<VwInvoiceEntity> index(Optional<VwUserEntity> vwUserEntity) {
@@ -91,7 +91,7 @@ public class InvoiceService {
         return vwInvoiceRepo.findBySellerOrBuyer(vwUserEntity.get().getUsername(),vwUserEntity.get().getUsername());
     }
 
-    public List<VwInvoiceEntity> show(Integer id) {
-        return vwInvoiceRepo.findById(id.intValue());
+    public List<VwInvoiceEntity> show(String id) {
+        return vwInvoiceRepo.findByNoInvoice(id);
     }
 }

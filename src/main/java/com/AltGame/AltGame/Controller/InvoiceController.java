@@ -26,16 +26,16 @@ public class InvoiceController {
     }
 
     @GetMapping("/show/{id}")
-    public ResponseDto showById(@PathVariable Integer id){
+    public ResponseDto showById(@PathVariable String id){
         return new ResponseDto("200","Succes Show Inovice",invoiceService.show(id));
     }
 
     // Update Data To Table
     @PostMapping("/pay/{id}")
-    public ResponseDto update(InvoiceDto invoiceDto, @RequestParam("image") MultipartFile image, @PathVariable Integer id) throws IOException {
+    public ResponseDto update(InvoiceDto invoiceDto, @RequestParam("image") MultipartFile image, @PathVariable String id) throws IOException {
         invoiceDto.setImage(image);
-        invoiceDto.setInvoiceId(id);
-        if(invoiceService.exitsByInvoiceId(invoiceDto.getInvoiceId())){
+        invoiceDto.setNoInvoice(id);
+        if(invoiceService.exitsByNoInvoice(invoiceDto.getNoInvoice())){
             invoiceService.update(invoiceDto);
             return new ResponseDto("200","Succes Pay");
         }
