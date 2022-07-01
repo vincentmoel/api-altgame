@@ -25,6 +25,11 @@ public class InvoiceController {
         return new ResponseDto("200","Success Index Invoices", invoiceService.index(userService.get_user(userService.authentication().getName())));
     }
 
+    @GetMapping("/show/{id}")
+    public ResponseDto showById(@PathVariable Integer id){
+        return new ResponseDto("200","Succes Show Inovice",invoiceService.show(id));
+    }
+
     // Update Data To Table
     @PostMapping("/pay/{id}")
     public ResponseDto update(InvoiceDto invoiceDto, @RequestParam("image") MultipartFile image, @PathVariable Integer id) throws IOException {

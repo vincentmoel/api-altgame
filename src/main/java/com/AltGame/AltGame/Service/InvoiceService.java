@@ -90,4 +90,8 @@ public class InvoiceService {
         }
         return vwInvoiceRepo.findBySellerOrBuyer(vwUserEntity.get().getUsername(),vwUserEntity.get().getUsername());
     }
+
+    public List<VwInvoiceEntity> show(Integer id) {
+        return vwInvoiceRepo.findById(id.intValue());
+    }
 }

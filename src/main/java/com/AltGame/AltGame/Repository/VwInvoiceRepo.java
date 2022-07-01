@@ -15,6 +15,6 @@ import java.util.Optional;
 public interface VwInvoiceRepo extends JpaRepository<VwInvoiceEntity, Integer> {
 
     List<VwInvoiceEntity> findByBuyer(String buyer);
-
+    List<VwInvoiceEntity> findById(int id);
     List<VwInvoiceEntity> findBySellerOrBuyer(String seller, String buyer);
 }
