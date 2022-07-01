@@ -13,5 +13,9 @@ public interface InvoiceRepo extends JpaRepository<InvoiceEntity, Integer> {
     @Query(value = "SELECT no_invoice FROM invoices ORDER BY invoice_id DESC LIMIT 1", nativeQuery = true)
     String lastNoInvoice();
 
+    @Query(value = "SELECT invoice_id FROM invoices ORDER BY invoice_id DESC LIMIT 1", nativeQuery = true)
+    Integer lastInvoiceId();
+
     InvoiceEntity findById(int invoiceId);
+
 }

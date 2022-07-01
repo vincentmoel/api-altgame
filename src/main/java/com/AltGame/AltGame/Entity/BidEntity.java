@@ -32,8 +32,8 @@ public class BidEntity {
     @Column(name="updated_at")
     private Date updatedAt;
 
-    @Column(name="deleted_at")
-    private Date deletedAt;
+    @Column(name="accepted_at")
+    private Date acceptedAt;
 
 
 }

@@ -36,7 +36,25 @@ spring.mvc.pathmatch.matching-strategy = ANT_PATH_MATCHER
 - `Java 8`
 
 # View Table
+- vw_notifications
 
+```roomsql
+    CREATE VIEW vw_notifications AS
+    SELECT
+    
+    invoices.no_invoice,
+    products.name AS product_name, products.image AS product_image, products.price AS product_price,
+    bids.price AS bid_price, bids.user_id,
+    notifications.notification_id, notifications.created_at, notifications.status
+    
+    FROM invoices,products,bids,notifications
+    
+    WHERE
+    
+    invoices.bid_id = bids.bid_id AND
+    bids.product_id = products.product_id AND
+    notifications.invoice_id = invoices.invoice_id
+```
 - vw_users
 
 ```roomsql
