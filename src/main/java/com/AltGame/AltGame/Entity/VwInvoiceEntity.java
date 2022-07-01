@@ -34,6 +34,9 @@ public class VwInvoiceEntity {
     @Column(name = "buyer")
     private String buyer;
 
+    @Column(name="phone")
+    private String phone;
+
     @Column(name = "name")
     private String name;
 

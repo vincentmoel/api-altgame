@@ -106,6 +106,7 @@ SELECT
 	i.updated_at, 
 	b.price AS bid_price,
 	(SELECT username FROM users WHERE users.user_id = b.user_id) AS buyer , 
+	(SELECT phone FROM users WHERE users.user_id = b.user_id) AS phone , 
 	p.name, 
 	p.price AS product_price, 
 	p.image, 
@@ -119,10 +120,9 @@ FROM
 	products p
 
 WHERE 
-
-i.bid_id = b.bid_id AND
-b.product_id = p.product_id AND
-b.status = 'accepted'
+    i.bid_id = b.bid_id AND
+    b.product_id = p.product_id AND
+    b.status = 'accepted'
 ```
 
 # Roles Table
