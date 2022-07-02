@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.AltGame.AltGame.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,13 +16,18 @@ import com.AltGame.AltGame.Entity.WishlistEntity;
 import com.AltGame.AltGame.Service.WishlistService;
 
 @RestController
-@RequestMapping("/api/wishlists")
 public class WishlistController {
     @Autowired
     WishlistService wishlistService;
+    @Autowired
+    UserService userService;
 
+    @GetMapping("/api/is-product-in-wishlist/{productId}")
+    public ResponseDto isProductInWishlist(@PathVariable Integer productId){
+        return new ResponseDto("200","Succes Show Wishlist", wishlistService.isProductInWishlist(productId, userService.getUserIdByUsername(userService.authentication().getName())));
+    }
     // Get All Data From Table
-    @GetMapping("/index")
+    @GetMapping("/api/wishlists/index")
     public ResponseDto index() {
 
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
@@ -31,7 +37,7 @@ public class WishlistController {
     }
 
     // Save Data To Table
-    @PostMapping("/store")
+    @PostMapping("/api/wishlists/store")
     public ResponseDto store(@RequestBody WishlistDto wishlistDto) {
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
         return new ResponseDto("200", "Success Store Wishlist",
@@ -39,12 +45,11 @@ public class WishlistController {
     }
 
     // Delete Data From Table
-    @PostMapping("/destroy")
+    @PostMapping("/api/wishlists/destroy")
     public ResponseDto destroy(@RequestBody WishlistDto wishlistDto) {
         ResponseDto responseDto;
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
         boolean destroyStatus = wishlistService.destroy(wishlistDto, (String) authUser.getPrincipal());
-
         if(destroyStatus)
         {
             responseDto = new ResponseDto("200", "Success Destroy Wishlist");
@@ -53,7 +58,6 @@ public class WishlistController {
         {
             responseDto = new ResponseDto("204", "Failed Destroy Wishlist");
         }
-
         return responseDto;
     }
 }

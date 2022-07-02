@@ -1,7 +1,10 @@
 package com.AltGame.AltGame.Service;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,4 +54,13 @@ public class WishlistService {
 
 	}
 
+    public Map<String, String> isProductInWishlist(Integer productId, Integer userId) {
+		Map<String, String> respon = new HashMap<>();
+		if(Objects.isNull(wishlistRepo.findByProductIdAndUserId(productId,userId))){
+			respon.put("on_wishlist","false");
+		}else{
+			respon.put("on_wishlist","true");
+		}
+		return respon;
+    }
 }
