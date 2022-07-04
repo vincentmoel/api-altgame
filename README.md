@@ -12,7 +12,12 @@
 </p>
 
 # Intelj Initialize
-
+- ### If you run this program locally:
+  1 . Open UsersSecurityConfig.java in config folder <br>
+  2 . Comment this line 
+ ```java
+  http.cors().configurationSource(corsConfigurationSource()).and().requiresChannel().anyRequest().requiresSecure();
+  ```
 - ### Make  application-dev.properties
 ```
 server.port=8080
