@@ -24,7 +24,7 @@ public class UserController {
         if(Objects.isNull(vwUserEntity)){
             return new ResponseEntity<>(new ResponseDto("204", "User Not Found"), HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(new ResponseDto("202", "Success Get Data", vwUserEntity), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(new ResponseDto("302", "Success Get Data", vwUserEntity), HttpStatus.FOUND);
     }
     @PostMapping("/update")
     public ResponseEntity<?> update(UserDto userDto, @RequestParam("image") MultipartFile image) throws IOException {

@@ -60,7 +60,7 @@ public class RefreshToken extends UsernamePasswordAuthenticationFilter {
         token.put("refresh_token", refreshToken);
         Map<String,Object> data = new HashMap<>();
         data.put("tokens",token);
-        ResponseDto responseDto = new ResponseDto("200","Succes Login",data);
+        ResponseDto responseDto = new ResponseDto("202","Succes Login",data);
         response.setStatus(HttpServletResponse.SC_ACCEPTED);
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), responseDto);

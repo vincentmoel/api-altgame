@@ -33,8 +33,8 @@ public class ProductService {
         return vwProductRepo.findByStatusAndUsername("active", username);
     }
 
-    public ProductEntity show(int productId) {
-        return productRepo.findByProductId(productId);
+    public VwProductEntity show(int productId) {
+        return vwProductRepo.findByProductId(productId);
     }
 
     public void store(ProductDto pDto, String username) throws IOException {
@@ -54,7 +54,7 @@ public class ProductService {
         productRepo.save(pEntity);
     }
 
-    public ProductEntity update(String username, int productId, ProductDto pDto) throws IOException {
+    public void update(String username, int productId, ProductDto pDto) throws IOException {
         int userId = userService.getUserIdByUsername(username);
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         ProductEntity pEntity = productRepo.findByProductIdAndUserId(productId, userId);
@@ -66,8 +66,7 @@ public class ProductService {
         pEntity.setDescription(pDto.getDescription());
         pEntity.setStatus(pDto.getStatus());
         pEntity.setUpdatedAt(timestamp);
-
-        return productRepo.save(pEntity);
+        productRepo.save(pEntity);
     }
 
     public boolean destroy(String username, int productId) {
