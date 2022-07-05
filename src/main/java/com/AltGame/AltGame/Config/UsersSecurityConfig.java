@@ -61,7 +61,7 @@ public class UsersSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers("/api/login/**").permitAll();
-        http.authorizeRequests().antMatchers("/api/signup", "/swagger-ui.html/**","/refresh-token","/api/products/index","/api/products","/api/bids/**").permitAll();
+        http.authorizeRequests().antMatchers("/api/signup", "/swagger-ui.html/**","/refresh-token","/api/products/index","/api/products","/api/products/show/**","/api/bids/**").permitAll();
 //        http.authorizeRequests().antMatchers("/api/bids/**").hasAnyAuthority("buyer");
 //        http.authorizeRequests().antMatchers("/api/products/**").hasAnyAuthority("seller");
         http.authorizeRequests().antMatchers( "/api/**").hasAnyAuthority("buyer","seller");
