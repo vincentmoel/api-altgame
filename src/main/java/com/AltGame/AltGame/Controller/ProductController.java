@@ -59,6 +59,9 @@ public class ProductController {
     public ResponseEntity<?> show(@PathVariable int productId) {
         Map<String, Object> response = new HashMap<>();
         response.put("product", productService.show(productId));
+        if(productService.show(productId).isEmpty()){
+            return new ResponseEntity<>(new ResponseDto("204", "No Data Search", response),HttpStatus.NO_CONTENT);
+        }
         return new ResponseEntity<>(new ResponseDto("202", "Success Show Product", response), HttpStatus.ACCEPTED);
     }
 
@@ -83,14 +86,12 @@ public class ProductController {
 
     // Delete Data From Table
     @PostMapping(path = "/destroy/{productId}")
-    public ResponseDto destroy(@PathVariable int productId) {
+    public ResponseEntity<?> destroy(@PathVariable int productId) {
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
-
         boolean status = productService.destroy((String) authUser.getPrincipal(), productId);
-
         if (!status)
-            return new ResponseDto("204", "Failed Destroy Product");
+            return new ResponseEntity<>(new ResponseDto("400", "Failed Destroy Product"), HttpStatus.BAD_REQUEST);
 
-        return new ResponseDto("200", "Success Destroy Product");
+        return new ResponseEntity<>( new ResponseDto("202", "Success Destroy Product"), HttpStatus.ACCEPTED);
     }
 }

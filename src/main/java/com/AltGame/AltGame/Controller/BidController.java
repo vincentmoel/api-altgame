@@ -6,6 +6,8 @@ import com.AltGame.AltGame.Entity.BidEntity;
 import com.AltGame.AltGame.Service.BidService;
 import com.AltGame.AltGame.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/bids")
@@ -24,57 +27,65 @@ public class BidController {
     @Autowired
     UserService userService;
 
-
     // Get All Data From Table
+    // history buyer
     @GetMapping(path="/index")
-    public ResponseDto index()
+    public ResponseEntity<?> index()
     {
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
-
-        Map<String, List<BidEntity>> mapBids = new HashMap<>();
+        Map<String, Object> mapBids = new HashMap<>();
         mapBids.put("bids",bidService.index((String) authUser.getPrincipal()));
-        return new ResponseDto("200","Success Index Bid",mapBids);
+        if(bidService.index((String) authUser.getPrincipal()).isEmpty()){
+           return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(new ResponseDto("202","Success Index Bid",mapBids), HttpStatus.ACCEPTED);
     }
 
     // Get One Data From Table
+    // show buyer
     @GetMapping(path="/show/{bidId}")
-    public ResponseDto show(@PathVariable int bidId)
+    public ResponseEntity<?> show(@PathVariable int bidId)
     {
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
 
         BidEntity bid = bidService.show((String) authUser.getPrincipal(), bidId);
 
-        Map<String, BidEntity> mapBid = new HashMap<>();
+        Map<String, Object> mapBid = new HashMap<>();
         mapBid.put("bids",bid);
-
-        return new ResponseDto("200","Success Get Bid",mapBid);
+        if(Objects.isNull(bid)){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(new ResponseDto("202","Success Get Bid",mapBid), HttpStatus.ACCEPTED);
     }
 
     // Save Data To Table
+    // buyer
     @PostMapping(path="/store")
-    public ResponseDto store(@RequestBody BidDto bidDto)
+    public ResponseEntity<?> store(@RequestBody BidDto bidDto)
     {
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
 
-        BidEntity bid = bidService.store((String) authUser.getPrincipal(), bidDto);
+        bidService.store((String) authUser.getPrincipal(), bidDto);
 
-        return new ResponseDto("200","Success Store Bid", bid);
+        return new ResponseEntity<>(new ResponseDto("201","Success Store Bid"), HttpStatus.CREATED);
     }
 
     // Update Data To Table
+    // buyer
     @PostMapping(path="/update/{bidId}")
-    public ResponseDto update(@PathVariable int bidId, @RequestBody BidDto bidDto)
+    public ResponseEntity<?> update(@PathVariable int bidId, @RequestBody BidDto bidDto)
     {
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
 
-        BidEntity bid = bidService.update((String) authUser.getPrincipal(), bidId, bidDto);
+        bidService.update((String) authUser.getPrincipal(), bidId, bidDto);
 
-        return new ResponseDto("200","Success Update Bid", bid);
+        return new ResponseEntity<>(new ResponseDto("202","Success Update Bid"), HttpStatus.ACCEPTED) ;
     }
 
     // Delete Data From Table
+    // buyer
     @PostMapping(path="/destroy/{bidId}")
-    public ResponseDto destroy(@PathVariable int bidId)
+    public ResponseEntity<?> destroy(@PathVariable int bidId)
     {
         ResponseDto responseDto;
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
@@ -83,43 +94,43 @@ public class BidController {
 
         if(status)
         {
-            responseDto = new ResponseDto("200","Success Destroy Bid");
+            return new ResponseEntity<>(new ResponseDto("202","Success Destroy Bid"), HttpStatus.ACCEPTED);
         }
         else
         {
-            responseDto = new ResponseDto("204", "Failed Destroy Bid");
+            return new ResponseEntity<>(new ResponseDto("400", "Failed Destroy Bid"), HttpStatus.BAD_REQUEST);
         }
-        return responseDto;
     }
 
     // Can be access by Product Owner only
     // Show all bids from product
     @GetMapping(path="/all-bids-product/{productId}")
-    public ResponseDto getAllBidsOnProduct(@PathVariable Integer productId)
+    public ResponseEntity<?> getAllBidsOnProduct(@PathVariable Integer productId)
     {
         List<BidEntity> bids = bidService.getAllBidsOnProduct(productId, userService.authentication().getPrincipal().toString());
-        return new ResponseDto("200","Success Get All Bid On Product", bids);
-
+        Map<String, Object> response = new HashMap<>();
+        response.put("Bids", bids);
+        if(bids.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(new ResponseDto("302","Success Get All Bid On Product", response), HttpStatus.FOUND);
     }
 
     // Can be access by Product Owner only
     @PostMapping(path="/accept-bid-buyer/{bidId}")
-    public ResponseDto acceptBidBuyer(@PathVariable Integer bidId)
+    public ResponseEntity<?> acceptBidBuyer(@PathVariable Integer bidId)
     {
         ResponseDto responseDto;
         boolean status = bidService.acceptBidBuyer(bidId, userService.authentication().getPrincipal().toString());
 
         if(status)
         {
-            responseDto = new ResponseDto("200", "Success Accept Bid Buyer");
+            return new ResponseEntity<>(new ResponseDto("202", "Success Accept Bid Buyer"), HttpStatus.ACCEPTED);
         }
         else
         {
-            responseDto = new ResponseDto("401", "Failed Accept Bid Buyer");
+            return new ResponseEntity<>(new ResponseDto("401", "Failed Accept Bid Buyer"), HttpStatus.BAD_REQUEST);
         }
-
-        return responseDto;
-
     }
 
 

@@ -52,7 +52,7 @@ public class BidService {
         return bidRepo.findByBidIdAndUserId(bidId, userId);
     }
 
-    public BidEntity store(String username, BidDto bidDto)
+    public void store(String username, BidDto bidDto)
     {
         BidEntity bid = new BidEntity();
 
@@ -63,10 +63,10 @@ public class BidService {
         bid.setCreatedAt(timestamp);
         bid.setUpdatedAt(timestamp);
 
-        return bidRepo.save(bid);
+        bidRepo.save(bid);
     }
 
-    public BidEntity update(String username, Integer bidId, BidDto bidDto)
+    public void update(String username, Integer bidId, BidDto bidDto)
     {
         Integer userId = userService.getUserIdByUsername(username);
 
@@ -74,7 +74,7 @@ public class BidService {
         bid.setPrice(bidDto.getPrice());
         bid.setUpdatedAt(timestamp);
 
-        return bidRepo.save(bid);
+        bidRepo.save(bid);
     }
 
     public boolean destroy(String username, Integer bidId)

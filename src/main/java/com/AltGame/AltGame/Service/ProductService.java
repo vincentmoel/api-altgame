@@ -33,7 +33,7 @@ public class ProductService {
         return vwProductRepo.findByStatusAndUsername("active", username);
     }
 
-    public VwProductEntity show(int productId) {
+    public List<VwProductEntity> show(int productId) {
         return vwProductRepo.findByProductId(productId);
     }
 
