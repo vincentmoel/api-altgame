@@ -64,7 +64,6 @@ public class ProductService {
         pEntity.setName(pDto.getName());
         pEntity.setPrice(pDto.getPrice());
         pEntity.setDescription(pDto.getDescription());
-        pEntity.setStatus(pDto.getStatus());
         pEntity.setUpdatedAt(timestamp);
         productRepo.save(pEntity);
     }
@@ -75,7 +74,6 @@ public class ProductService {
 
         ProductEntity product = productRepo.findByProductIdAndUserId(productId, userId);
         product.setDeletedAt(timestamp);
-
         productRepo.save(product);
 
         return true;

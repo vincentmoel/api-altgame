@@ -97,7 +97,8 @@ CREATE VIEW vw_products AS
 		users u
     WHERE 
 	p.category_id = c.category_id AND
-	p.user_id = u.user_id
+	p.user_id = u.user_id AND
+	p.deleted_at IS NULL
 ```
 - vw_invoices
 ```roomsql
