@@ -57,9 +57,9 @@ public class WishlistService {
     public Map<String, String> isProductInWishlist(Integer productId, Integer userId) {
 		Map<String, String> respon = new HashMap<>();
 		if(Objects.isNull(wishlistRepo.findByProductIdAndUserId(productId,userId))){
-			respon.put("on_wishlist","false");
+			respon.put("in_wishlist","false");
 		}else{
-			respon.put("on_wishlist","true");
+			respon.put("in_wishlist","true");
 		}
 		return respon;
     }

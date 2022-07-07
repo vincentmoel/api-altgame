@@ -1,19 +1,20 @@
 package com.AltGame.AltGame.Controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.AltGame.AltGame.Entity.WishlistEntity;
 import com.AltGame.AltGame.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import com.AltGame.AltGame.Dto.ResponseDto;
 import com.AltGame.AltGame.Dto.WishlistDto;
-import com.AltGame.AltGame.Entity.WishlistEntity;
 import com.AltGame.AltGame.Service.WishlistService;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 public class WishlistController {
@@ -23,41 +24,36 @@ public class WishlistController {
     UserService userService;
 
     @GetMapping("/api/is-product-in-wishlist/{productId}")
-    public ResponseDto isProductInWishlist(@PathVariable Integer productId){
-        return new ResponseDto("200","Succes Show Wishlist", wishlistService.isProductInWishlist(productId, userService.getUserIdByUsername(userService.authentication().getName())));
+    public ResponseEntity<?> isProductInWishlist(@PathVariable Integer productId){
+        Map<String, String> isInWishlist = wishlistService.isProductInWishlist(productId, userService.getUserIdByUsername(userService.authentication().getName()));
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Show Wishlist", isInWishlist), HttpStatus.OK);
+
     }
     // Get All Data From Table
     @GetMapping("/api/wishlists/index")
-    public ResponseDto index() {
-
-        Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
-        Map<String, List<WishlistEntity>> mapWishlists = new HashMap<>();
-        mapWishlists.put("wishlists", wishlistService.index((String) authUser.getPrincipal()));
-        return new ResponseDto("200", "Success Find Wishlists", mapWishlists);
+    public ResponseEntity<?> index() {
+        List<WishlistEntity> wishlists = wishlistService.index(userService.authentication().getName());
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Find Wishlists", wishlists), HttpStatus.OK);
     }
 
     // Save Data To Table
     @PostMapping("/api/wishlists/store")
-    public ResponseDto store(@RequestBody WishlistDto wishlistDto) {
-        Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
-        return new ResponseDto("200", "Success Store Wishlist",
-                wishlistService.store(wishlistDto, (String) authUser.getPrincipal()));
+    public ResponseEntity<?> store(@RequestBody WishlistDto wishlistDto) {
+        WishlistEntity wishlist = wishlistService.store(wishlistDto, userService.authentication().getName());
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Store Wishlist", wishlist), HttpStatus.OK);
+
     }
 
     // Delete Data From Table
     @PostMapping("/api/wishlists/destroy")
-    public ResponseDto destroy(@RequestBody WishlistDto wishlistDto) {
-        ResponseDto responseDto;
-        Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
-        boolean destroyStatus = wishlistService.destroy(wishlistDto, (String) authUser.getPrincipal());
+    public ResponseEntity<?> destroy(@RequestBody WishlistDto wishlistDto) {
+        boolean destroyStatus = wishlistService.destroy(wishlistDto, userService.authentication().getName());
         if(destroyStatus)
         {
-            responseDto = new ResponseDto("200", "Success Destroy Wishlist");
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Destroy Wishlist"), HttpStatus.OK);
         }
-        else
-        {
-            responseDto = new ResponseDto("204", "Failed Destroy Wishlist");
-        }
-        return responseDto;
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("400", "Failed Destroy Wishlist"), HttpStatus.BAD_REQUEST);
+
+
     }
 }
