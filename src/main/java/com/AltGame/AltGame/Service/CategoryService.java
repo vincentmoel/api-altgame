@@ -15,4 +15,8 @@ public class CategoryService {
     public List<CategoryEntity> index(){
         return categoryRepo.findAll();
     }
+
+    public boolean exitsByCategoryId(Integer id){
+        return !categoryRepo.existsById(id);
+    }
 }

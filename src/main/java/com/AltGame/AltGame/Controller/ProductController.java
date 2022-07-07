@@ -3,6 +3,7 @@ package com.AltGame.AltGame.Controller;
 import com.AltGame.AltGame.Dto.ProductDto;
 import com.AltGame.AltGame.Dto.ResponseDto;
 import com.AltGame.AltGame.Entity.VwProductEntity;
+import com.AltGame.AltGame.Service.CategoryService;
 import com.AltGame.AltGame.Service.ProductService;
 
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.AltGame.AltGame.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,10 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProductController {
     @Autowired
     ProductService productService;
+    @Autowired
+    CategoryService categoryService;
+    @Autowired
+    UserService userService;
 
     // Get All Data From Table
     @GetMapping(path = "/index")
@@ -70,6 +76,11 @@ public class ProductController {
     public ResponseEntity<?> store(ProductDto pDto, @RequestParam("image") MultipartFile image) throws IOException {
         pDto.setImage(image);
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
+        if(categoryService.exitsByCategoryId(pDto.getCategoryId())){
+            return new ResponseEntity<>(new ResponseDto("400", "Id Category Not Found"), HttpStatus.BAD_REQUEST);
+        }else if(!productService.validationStoreProduct(userService.authentication().getName())){
+            return new ResponseEntity<>(new ResponseDto("400", "Product Maximum 4"), HttpStatus.BAD_REQUEST);
+        }
         productService.store(pDto, (String) authUser.getPrincipal());
         return new ResponseEntity<>(new ResponseDto("201", "Success Store Product"), HttpStatus.CREATED);
     }
@@ -80,6 +91,9 @@ public class ProductController {
             throws IOException {
         pDto.setImage(image);
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
+        if(categoryService.exitsByCategoryId(pDto.getCategoryId())){
+            return new ResponseEntity<>(new ResponseDto("400", "Id Category Not Found"), HttpStatus.BAD_REQUEST);
+        }
         productService.update((String) authUser.getPrincipal(), productId, pDto);
         return new ResponseEntity<>(new ResponseDto("202", "Success Update Product"), HttpStatus.ACCEPTED);
     }
