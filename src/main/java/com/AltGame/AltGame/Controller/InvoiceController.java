@@ -6,6 +6,8 @@ import com.AltGame.AltGame.Entity.InvoiceEntity;
 import com.AltGame.AltGame.Service.InvoiceService;
 import com.AltGame.AltGame.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,31 +22,31 @@ public class InvoiceController {
     UserService userService;
     // Get All Data From Table
     @GetMapping("/index")
-    public ResponseDto index()
+    public ResponseEntity<?> index()
     {
-        return new ResponseDto("200","Success Index Invoices", invoiceService.index(userService.get_user(userService.authentication().getName())));
+        if(invoiceService.index(userService.get_user(userService.authentication().getName())).isEmpty()){
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Not Found Invoice"), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Index Invoices", invoiceService.index(userService.get_user(userService.authentication().getName()))), HttpStatus.OK);
     }
 
     @GetMapping("/show/{id}")
-    public ResponseDto showById(@PathVariable String id){
-        return new ResponseDto("200","Succes Show Inovice",invoiceService.show(id));
+    public ResponseEntity<?> showById(@PathVariable String id){
+        if(invoiceService.show(id).isEmpty()){
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("404","Not Found Inovice"), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Succes Show Inovice",invoiceService.show(id)), HttpStatus.OK) ;
     }
 
     // Update Data To Table
     @PostMapping("/pay/{id}")
-    public ResponseDto update(InvoiceDto invoiceDto, @RequestParam("image") MultipartFile image, @PathVariable String id) throws IOException {
+    public ResponseEntity<?> update(InvoiceDto invoiceDto, @RequestParam("image") MultipartFile image, @PathVariable String id) throws IOException {
         invoiceDto.setImage(image);
         invoiceDto.setNoInvoice(id);
         if(invoiceService.exitsByNoInvoice(invoiceDto.getNoInvoice())){
             invoiceService.update(invoiceDto);
-            return new ResponseDto("200","Succes Pay");
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Succes Pay"), HttpStatus.OK);
         }
-        return new ResponseDto("400","Failed Pay");
-    }
-
-    // Delete Data From Table
-    public void destroy()
-    {
-
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("400","Failed Pay"), HttpStatus.BAD_REQUEST);
     }
 }

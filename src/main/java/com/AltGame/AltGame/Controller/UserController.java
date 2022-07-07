@@ -22,9 +22,9 @@ public class UserController {
     public ResponseEntity<?> get_user(){
         Optional<VwUserEntity> vwUserEntity = userService.get_user(userService.authentication().getName());
         if(Objects.isNull(vwUserEntity)){
-            return new ResponseEntity<>(new ResponseDto("204", "User Not Found"), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(new ResponseDto("404", "User Not Found"), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(new ResponseDto("302", "Success Get Data", vwUserEntity), HttpStatus.FOUND);
+        return new ResponseEntity<>(new ResponseDto("200", "Success Get Data", vwUserEntity), HttpStatus.OK);
     }
     @PostMapping("/update")
     public ResponseEntity<?> update(UserDto userDto, @RequestParam("image") MultipartFile image) throws IOException {
@@ -32,7 +32,7 @@ public class UserController {
         userDto.setImage(image);
         if(Objects.nonNull(userService.getUserByUsername(userService.authentication().getPrincipal().toString()))){
             userService.update(userDto);
-            return new ResponseEntity<>(new ResponseDto("202","Success Update"), HttpStatus.ACCEPTED) ;
+            return new ResponseEntity<>(new ResponseDto("200","Success Update"), HttpStatus.OK) ;
         }
         return new ResponseEntity<>(new ResponseDto("400","Failed Update"), HttpStatus.BAD_REQUEST);
     }

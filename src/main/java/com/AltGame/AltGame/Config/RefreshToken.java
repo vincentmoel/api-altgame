@@ -53,17 +53,16 @@ public class RefreshToken extends UsernamePasswordAuthenticationFilter {
         token.put("access_token", accessToken);
         Map<String,Object> data = new HashMap<>();
         data.put("tokens",token);
-        ResponseDto responseDto = new ResponseDto("202","Succes Login",data);
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType(APPLICATION_JSON_VALUE);
-        new ObjectMapper().writeValue(response.getOutputStream(), responseDto);
+        new ObjectMapper().writeValue(response.getOutputStream(), new ResponseDto().responseBuilder("202","Succes Login",data));
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.setContentType(APPLICATION_JSON_VALUE);
-        new ObjectMapper().writeValue(response.getOutputStream(), new ResponseDto("403","Failed Login"));
+        new ObjectMapper().writeValue(response.getOutputStream(), new ResponseDto().responseBuilder("403","Failed Login"));
     }
 
     @Override
