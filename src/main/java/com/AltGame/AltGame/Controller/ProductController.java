@@ -2,14 +2,10 @@ package com.AltGame.AltGame.Controller;
 
 import com.AltGame.AltGame.Dto.ProductDto;
 import com.AltGame.AltGame.Dto.ResponseDto;
-import com.AltGame.AltGame.Entity.VwProductEntity;
 import com.AltGame.AltGame.Service.CategoryService;
 import com.AltGame.AltGame.Service.ProductService;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import com.AltGame.AltGame.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,45 +29,37 @@ public class ProductController {
     // Get All Data From Table
     @GetMapping(path = "/index")
     public ResponseEntity<?> index() {
-        Map<String, Object> response = new HashMap<>();
-        response.put("Products",productService.index());
         if(productService.index().isEmpty()){
-            return new ResponseEntity<>(new ResponseDto("404", "No Data Index Products"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "No Data Index Products"), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(new ResponseDto("200", "Success Index Products", response), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Index Products", productService.index()), HttpStatus.OK);
     }
 
     // Search Product
     @GetMapping(path = "")
     public ResponseEntity<?> searchProducts(@RequestParam(name = "search") String search) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("Products",productService.searchByName(search));
         if(productService.searchByName(search).isEmpty()){
-            return new ResponseEntity<>(new ResponseDto("404", "No Data Search", response),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "No Data Search"),HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(new ResponseDto("200", "Success Search", response),HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Search", productService.searchByName(search)),HttpStatus.OK);
     }
 
     // Show All User Products
     @GetMapping(path = "/{username}")
     public ResponseEntity<?> showUserProducts(@PathVariable String username) {
-        Map<String, List<VwProductEntity>> mapProducts = new HashMap<>();
-        mapProducts.put("products", productService.showUserProducts(username));
         if(productService.showUserProducts(username).isEmpty()){
-            return new ResponseEntity<>( new ResponseDto("404", "No Data Show User Products"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>( new ResponseDto().responseBuilder("404", "No Data Show User Products"), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(new ResponseDto("200", "Success Show User Products", mapProducts), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Show User Products", productService.showUserProducts(username)), HttpStatus.OK);
     }
 
     // Get One Data From Table
     @GetMapping(path = "/show/{productId}")
     public ResponseEntity<?> show(@PathVariable int productId) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("product", productService.show(productId));
         if(productService.show(productId).isEmpty()){
-            return new ResponseEntity<>(new ResponseDto("204", "No Data Search", response),HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("204", "No Data Search"),HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(new ResponseDto("202", "Success Show Product", response), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("202", "Success Show Product", productService.show(productId)), HttpStatus.ACCEPTED);
     }
 
     // Save Data To Table
@@ -80,12 +68,12 @@ public class ProductController {
         pDto.setImage(image);
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
         if(categoryService.exitsByCategoryId(pDto.getCategoryId())){
-            return new ResponseEntity<>(new ResponseDto("400", "Id Category Not Found"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("400", "Id Category Not Found"), HttpStatus.BAD_REQUEST);
         }else if(!productService.validationStoreProduct(userService.authentication().getName())){
-            return new ResponseEntity<>(new ResponseDto("400", "Product Maximum 4"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("400", "Product Maximum 4"), HttpStatus.BAD_REQUEST);
         }
         productService.store(pDto, (String) authUser.getPrincipal());
-        return new ResponseEntity<>(new ResponseDto("201", "Success Store Product"), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("201", "Success Store Product"), HttpStatus.CREATED);
     }
 
     // Update Data To Table
@@ -95,10 +83,10 @@ public class ProductController {
         pDto.setImage(image);
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
         if(categoryService.exitsByCategoryId(pDto.getCategoryId())){
-            return new ResponseEntity<>(new ResponseDto("400", "Id Category Not Found"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("400", "Id Category Not Found"), HttpStatus.BAD_REQUEST);
         }
         productService.update((String) authUser.getPrincipal(), productId, pDto);
-        return new ResponseEntity<>(new ResponseDto("200", "Success Update Product"), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Update Product"), HttpStatus.OK);
     }
 
     // Delete Data From Table
@@ -107,8 +95,8 @@ public class ProductController {
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
         boolean status = productService.destroy((String) authUser.getPrincipal(), productId);
         if (!status)
-            return new ResponseEntity<>(new ResponseDto("400", "Failed Destroy Product"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("400", "Failed Destroy Product"), HttpStatus.BAD_REQUEST);
 
-        return new ResponseEntity<>( new ResponseDto("200", "Success Destroy Product"), HttpStatus.OK);
+        return new ResponseEntity<>( new ResponseDto().responseBuilder("200", "Success Destroy Product"), HttpStatus.OK);
     }
 }

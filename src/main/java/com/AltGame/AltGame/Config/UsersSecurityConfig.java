@@ -57,7 +57,7 @@ public class UsersSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().configurationSource(corsConfigurationSource()).and().requiresChannel().anyRequest().requiresSecure();
+//        http.cors().configurationSource(corsConfigurationSource()).and().requiresChannel().anyRequest().requiresSecure();
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers("/api/login/**").permitAll();

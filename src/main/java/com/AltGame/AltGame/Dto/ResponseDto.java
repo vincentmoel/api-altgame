@@ -6,6 +6,7 @@ import lombok.Data;
 import org.springframework.boot.jackson.JsonObjectSerializer;
 
 import java.io.IOException;
+import java.util.*;
 
 @Data
 public class ResponseDto {
@@ -25,5 +26,21 @@ public class ResponseDto {
     }
 
     public ResponseDto() {
+    }
+
+    public Map<String, Object> responseBuilder(String status, String message) {
+        LinkedHashMap<String, Object> hm = new LinkedHashMap<>();
+        hm.put("status",status);
+        hm.put("message",message);
+
+        return hm;
+    }
+
+    public Map<String, Object> responseBuilder(String status, String message, Object data) {
+        LinkedHashMap<String, Object> hm = new LinkedHashMap<>();
+        hm.put("status",status);
+        hm.put("message",message);
+        hm.put("data",data);
+        return hm;
     }
 }
