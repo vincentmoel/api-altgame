@@ -57,9 +57,9 @@ public class ProductController {
     @GetMapping(path = "/show/{productId}")
     public ResponseEntity<?> show(@PathVariable int productId) {
         if(productService.show(productId).isEmpty()){
-            return new ResponseEntity<>(new ResponseDto().responseBuilder("204", "No Data Search"),HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "No Data Search"),HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(new ResponseDto().responseBuilder("202", "Success Show Product", productService.show(productId)), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Show Product", productService.show(productId)), HttpStatus.OK);
     }
 
     // Save Data To Table
@@ -68,7 +68,7 @@ public class ProductController {
         pDto.setImage(image);
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
         if(categoryService.exitsByCategoryId(pDto.getCategoryId())){
-            return new ResponseEntity<>(new ResponseDto().responseBuilder("400", "Id Category Not Found"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Category Not Found"), HttpStatus.NOT_FOUND);
         }else if(!productService.validationStoreProduct(userService.authentication().getName())){
             return new ResponseEntity<>(new ResponseDto().responseBuilder("400", "Product Maximum 4"), HttpStatus.BAD_REQUEST);
         }
@@ -83,7 +83,7 @@ public class ProductController {
         pDto.setImage(image);
         Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
         if(categoryService.exitsByCategoryId(pDto.getCategoryId())){
-            return new ResponseEntity<>(new ResponseDto().responseBuilder("400", "Id Category Not Found"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Category Not Found"), HttpStatus.NOT_FOUND);
         }
         productService.update((String) authUser.getPrincipal(), productId, pDto);
         return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Update Product"), HttpStatus.OK);
