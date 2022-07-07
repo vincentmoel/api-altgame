@@ -36,9 +36,9 @@ public class ProductController {
         Map<String, Object> response = new HashMap<>();
         response.put("Products",productService.index());
         if(productService.index().isEmpty()){
-            return new ResponseEntity<>(new ResponseDto("204", "No Data Index Products"), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(new ResponseDto("404", "No Data Index Products"), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(new ResponseDto("302", "Success Index Products", response), HttpStatus.FOUND);
+        return new ResponseEntity<>(new ResponseDto("200", "Success Index Products", response), HttpStatus.OK);
     }
 
     // Search Product
@@ -47,17 +47,20 @@ public class ProductController {
         Map<String, Object> response = new HashMap<>();
         response.put("Products",productService.searchByName(search));
         if(productService.searchByName(search).isEmpty()){
-            return new ResponseEntity<>(new ResponseDto("204", "No Data Search", response),HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(new ResponseDto("404", "No Data Search", response),HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(new ResponseDto("302", "Success Search", response),HttpStatus.FOUND);
+        return new ResponseEntity<>(new ResponseDto("200", "Success Search", response),HttpStatus.OK);
     }
 
     // Show All User Products
     @GetMapping(path = "/{username}")
-    public ResponseDto showUserProducts(@PathVariable String username) {
+    public ResponseEntity<?> showUserProducts(@PathVariable String username) {
         Map<String, List<VwProductEntity>> mapProducts = new HashMap<>();
         mapProducts.put("products", productService.showUserProducts(username));
-        return new ResponseDto("200", "Success Show User Products", mapProducts);
+        if(productService.showUserProducts(username).isEmpty()){
+            return new ResponseEntity<>( new ResponseDto("404", "No Data Show User Products"), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(new ResponseDto("200", "Success Show User Products", mapProducts), HttpStatus.OK);
     }
 
     // Get One Data From Table
@@ -95,7 +98,7 @@ public class ProductController {
             return new ResponseEntity<>(new ResponseDto("400", "Id Category Not Found"), HttpStatus.BAD_REQUEST);
         }
         productService.update((String) authUser.getPrincipal(), productId, pDto);
-        return new ResponseEntity<>(new ResponseDto("202", "Success Update Product"), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(new ResponseDto("200", "Success Update Product"), HttpStatus.OK);
     }
 
     // Delete Data From Table
@@ -106,6 +109,6 @@ public class ProductController {
         if (!status)
             return new ResponseEntity<>(new ResponseDto("400", "Failed Destroy Product"), HttpStatus.BAD_REQUEST);
 
-        return new ResponseEntity<>( new ResponseDto("202", "Success Destroy Product"), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>( new ResponseDto("200", "Success Destroy Product"), HttpStatus.OK);
     }
 }
