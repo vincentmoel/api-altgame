@@ -41,7 +41,7 @@ public class LoginController {
         }else if(Objects.isNull(user)){
             return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Register User",userService.store(registerDto)), HttpStatus.OK);
         }else{
-            return  new ResponseEntity<>(new ResponseDto().responseBuilder("400","Error Username Already Exist"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("400","Error Username Already Exist"), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -68,7 +68,7 @@ public class LoginController {
                 Map<String,String> token = new HashMap<>();
                 token.put("access_token", accessToken);
                 response.setContentType(APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(response.getOutputStream(), new ResponseDto().responseBuilder("200", "Succes Reresh Token", token));
+                new ObjectMapper().writeValue(response.getOutputStream(), new ResponseDto().responseBuilder("200", "Success Refresh Token", token));
             }catch (Exception e){
                 response.setHeader("error", e.getMessage());
                 response.setStatus(FORBIDDEN.value());
@@ -79,7 +79,7 @@ public class LoginController {
                 new ObjectMapper().writeValue(response.getOutputStream(), errorMap);
             }
         }else{
-            throw new RuntimeException("refresh token is missing");
+            throw new RuntimeException("Refresh Token is Missing");
         }
     }
 }

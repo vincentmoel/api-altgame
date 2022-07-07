@@ -30,7 +30,7 @@ public class ProductController {
     @GetMapping(path = "/index")
     public ResponseEntity<?> index() {
         if(productService.index().isEmpty()){
-            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "No Data Index Products"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Products Data Not Found "), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Index Products", productService.index()), HttpStatus.OK);
     }
@@ -39,7 +39,7 @@ public class ProductController {
     @GetMapping(path = "")
     public ResponseEntity<?> searchProducts(@RequestParam(name = "search") String search) {
         if(productService.searchByName(search).isEmpty()){
-            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "No Data Search"),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Products Data Not Found "), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Search", productService.searchByName(search)),HttpStatus.OK);
     }
@@ -48,7 +48,7 @@ public class ProductController {
     @GetMapping(path = "/{username}")
     public ResponseEntity<?> showUserProducts(@PathVariable String username) {
         if(productService.showUserProducts(username).isEmpty()){
-            return new ResponseEntity<>( new ResponseDto().responseBuilder("404", "No Data Show User Products"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Products Data Not Found "), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Show User Products", productService.showUserProducts(username)), HttpStatus.OK);
     }
@@ -57,7 +57,7 @@ public class ProductController {
     @GetMapping(path = "/show/{productId}")
     public ResponseEntity<?> show(@PathVariable int productId) {
         if(productService.show(productId).isEmpty()){
-            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "No Data Search"),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Products Data Not Found "), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Show Product", productService.show(productId)), HttpStatus.OK);
     }
@@ -66,13 +66,14 @@ public class ProductController {
     @PostMapping(path = "/store")
     public ResponseEntity<?> store(ProductDto pDto, @RequestParam("image") MultipartFile image) throws IOException {
         pDto.setImage(image);
-        Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
         if(categoryService.exitsByCategoryId(pDto.getCategoryId())){
+
             return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Category Not Found"), HttpStatus.NOT_FOUND);
+
         }else if(!productService.validationStoreProduct(userService.authentication().getName())){
             return new ResponseEntity<>(new ResponseDto().responseBuilder("400", "Product Maximum 4"), HttpStatus.BAD_REQUEST);
         }
-        productService.store(pDto, (String) authUser.getPrincipal());
+        productService.store(pDto, userService.authentication().getName());
         return new ResponseEntity<>(new ResponseDto().responseBuilder("201", "Success Store Product"), HttpStatus.CREATED);
     }
 
@@ -81,19 +82,18 @@ public class ProductController {
     public ResponseEntity<?> update(@PathVariable int productId, ProductDto pDto, @RequestParam("image") MultipartFile image)
             throws IOException {
         pDto.setImage(image);
-        Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
+
         if(categoryService.exitsByCategoryId(pDto.getCategoryId())){
             return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Category Not Found"), HttpStatus.NOT_FOUND);
         }
-        productService.update((String) authUser.getPrincipal(), productId, pDto);
+        productService.update(userService.authentication().getName(), productId, pDto);
         return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Update Product"), HttpStatus.OK);
     }
 
     // Delete Data From Table
     @PostMapping(path = "/destroy/{productId}")
     public ResponseEntity<?> destroy(@PathVariable int productId) {
-        Authentication authUser = SecurityContextHolder.getContext().getAuthentication();
-        boolean status = productService.destroy((String) authUser.getPrincipal(), productId);
+        boolean status = productService.destroy(userService.authentication().getName(), productId);
         if (!status)
             return new ResponseEntity<>(new ResponseDto().responseBuilder("400", "Failed Destroy Product"), HttpStatus.BAD_REQUEST);
 

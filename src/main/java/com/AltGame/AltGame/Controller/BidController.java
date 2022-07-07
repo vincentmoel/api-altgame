@@ -34,7 +34,7 @@ public class BidController {
     {
         List<BidEntity> bids = bidService.index(userService.authentication().getName());
         if(bidService.index(userService.authentication().getName()).isEmpty()){
-           return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+           return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Bid Data Not Found"),HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Index Bid", bids), HttpStatus.OK);
     }
@@ -47,7 +47,7 @@ public class BidController {
         BidEntity bid = bidService.show(userService.authentication().getName(), bidId);
 
         if(Objects.isNull(bid)){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Bid Data Not Found"),HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Get Bid", bid), HttpStatus.OK);
     }

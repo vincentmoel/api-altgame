@@ -20,7 +20,7 @@ public class CategoryController {
     public ResponseEntity<?> index()
     {
         if(categoryService.index().isEmpty()){
-            return  new ResponseEntity<>(new ResponseDto().responseBuilder("404","Not Found Categories"), HttpStatus.NOT_FOUND);
+            return  new ResponseEntity<>(new ResponseDto().responseBuilder("404","Category Not Found"), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Get All Category",categoryService.index()), HttpStatus.OK) ;
     }

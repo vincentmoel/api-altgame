@@ -27,13 +27,12 @@ public class NotificationController {
     @GetMapping("/show-user-notifications")
     public ResponseEntity<?> showUserNotifications()
     {
-        String username = userService.authentication().getPrincipal().toString();
-        Map<String, Object> response = new HashMap<>();
-        response.put("Notifications", notificationService.showUserNotifications(username));
+        String username = userService.authentication().getName();
+
         if(notificationService.showUserNotifications(username).isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(new ResponseDto("404", "Notification Data Not Found"), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(new ResponseDto("202", "Success Get User Notifications", response), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(new ResponseDto("200", "Success Get User Notifications", notificationService.showUserNotifications(username)), HttpStatus.OK);
     }
 
 }

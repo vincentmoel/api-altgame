@@ -25,7 +25,7 @@ public class InvoiceController {
     public ResponseEntity<?> index()
     {
         if(invoiceService.index(userService.get_user(userService.authentication().getName())).isEmpty()){
-            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Not Found Invoice"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Invoice Data Not Found"), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Index Invoices", invoiceService.index(userService.get_user(userService.authentication().getName()))), HttpStatus.OK);
     }
@@ -33,7 +33,8 @@ public class InvoiceController {
     @GetMapping("/show/{id}")
     public ResponseEntity<?> showById(@PathVariable String id){
         if(invoiceService.show(id).isEmpty()){
-            return new ResponseEntity<>(new ResponseDto().responseBuilder("404","Not Found Inovice"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Invoice Data Not Found"), HttpStatus.NOT_FOUND);
+
         }
         return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Succes Show Inovice",invoiceService.show(id)), HttpStatus.OK) ;
     }
