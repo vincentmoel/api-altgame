@@ -11,6 +11,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,20 +33,19 @@ public class LoginController {
     UserService userService;
 
     @PostMapping(value = "/api/signup")
-    public ResponseDto createNewUser(@RequestBody RegisterDto registerDto) {
+    public ResponseEntity<?> createNewUser(@RequestBody RegisterDto registerDto) {
         ResponseDto response;
         UserEntity user = userService.getUserByUsername(registerDto.getUsername());
         if(userService.exitsByEmail(registerDto.getUsername())){
-            response = new ResponseDto("400","Error Email Already Exist");
+            return new ResponseEntity<>(new ResponseDto("400","Error Email Already Exist"), HttpStatus.BAD_REQUEST);
         }else if(Objects.isNull(user)){
-            response = new ResponseDto("200","Success Register User",userService.store(registerDto));
+            return new ResponseEntity<>(new ResponseDto("200","Success Register User",userService.store(registerDto)), HttpStatus.OK);
         }else{
-            response = new ResponseDto("400","Error Username Already Exist");
+            return  new ResponseEntity<>(new ResponseDto("400","Error Username Already Exist"), HttpStatus.BAD_REQUEST);
         }
-        return response;
     }
 
-    @GetMapping("/refresh-token")
+    @GetMapping("/api/refresh-token")
     public void refreshTokenController(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
         if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
@@ -66,10 +67,8 @@ public class LoginController {
 
                 Map<String,String> token = new HashMap<>();
                 token.put("access_token", accessToken);
-                token.put("refresh_token", refresh_token);
                 Map<String,Object> data = new HashMap<>();
                 data.put("tokens",token);
-                data.put("users",userService.getUserByUsername(usernameDecode));
                 response.setContentType(APPLICATION_JSON_VALUE);
                 new ObjectMapper().writeValue(response.getOutputStream(), data);
             }catch (Exception e){
