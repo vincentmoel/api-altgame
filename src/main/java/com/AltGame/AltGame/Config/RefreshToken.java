@@ -49,12 +49,6 @@ public class RefreshToken extends UsernamePasswordAuthenticationFilter {
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
-
-        String refreshToken = JWT.create()
-                .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() +240*60*1000))
-                .withIssuer(request.getRequestURL().toString())
-                .sign(algorithm);
         Map<String,String> token = new HashMap<>();
         token.put("access_token", accessToken);
         Map<String,Object> data = new HashMap<>();
