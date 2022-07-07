@@ -2,7 +2,6 @@ package com.AltGame.AltGame.Controller;
 
 import com.AltGame.AltGame.Dto.InvoiceDto;
 import com.AltGame.AltGame.Dto.ResponseDto;
-import com.AltGame.AltGame.Entity.InvoiceEntity;
 import com.AltGame.AltGame.Service.InvoiceService;
 import com.AltGame.AltGame.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

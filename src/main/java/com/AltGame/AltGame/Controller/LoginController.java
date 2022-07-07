@@ -34,7 +34,6 @@ public class LoginController {
 
     @PostMapping(value = "/api/signup")
     public ResponseEntity<?> createNewUser(@RequestBody RegisterDto registerDto) {
-        ResponseDto response;
         UserEntity user = userService.getUserByUsername(registerDto.getUsername());
         if(userService.exitsByEmail(registerDto.getUsername())){
             return new ResponseEntity<>(new ResponseDto().responseBuilder("400","Error Email Already Exist"), HttpStatus.BAD_REQUEST);
