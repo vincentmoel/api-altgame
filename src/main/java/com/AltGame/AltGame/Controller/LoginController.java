@@ -37,11 +37,11 @@ public class LoginController {
         ResponseDto response;
         UserEntity user = userService.getUserByUsername(registerDto.getUsername());
         if(userService.exitsByEmail(registerDto.getUsername())){
-            return new ResponseEntity<>(new ResponseDto("400","Error Email Already Exist"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("400","Error Email Already Exist"), HttpStatus.BAD_REQUEST);
         }else if(Objects.isNull(user)){
-            return new ResponseEntity<>(new ResponseDto("200","Success Register User",userService.store(registerDto)), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Register User",userService.store(registerDto)), HttpStatus.OK);
         }else{
-            return  new ResponseEntity<>(new ResponseDto("400","Error Username Already Exist"), HttpStatus.BAD_REQUEST);
+            return  new ResponseEntity<>(new ResponseDto().responseBuilder("400","Error Username Already Exist"), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -70,7 +70,7 @@ public class LoginController {
                 Map<String,Object> data = new HashMap<>();
                 data.put("tokens",token);
                 response.setContentType(APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(response.getOutputStream(), data);
+                new ObjectMapper().writeValue(response.getOutputStream(), new ResponseDto().responseBuilder("200", "Succes Reresh Token", data));
             }catch (Exception e){
                 response.setHeader("error", e.getMessage());
                 response.setStatus(FORBIDDEN.value());
