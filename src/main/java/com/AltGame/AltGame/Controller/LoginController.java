@@ -67,10 +67,8 @@ public class LoginController {
 
                 Map<String,String> token = new HashMap<>();
                 token.put("access_token", accessToken);
-                Map<String,Object> data = new HashMap<>();
-                data.put("tokens",token);
                 response.setContentType(APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(response.getOutputStream(), new ResponseDto().responseBuilder("200", "Succes Reresh Token", data));
+                new ObjectMapper().writeValue(response.getOutputStream(), new ResponseDto().responseBuilder("200", "Succes Reresh Token", token));
             }catch (Exception e){
                 response.setHeader("error", e.getMessage());
                 response.setStatus(FORBIDDEN.value());
