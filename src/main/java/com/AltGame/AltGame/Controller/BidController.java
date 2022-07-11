@@ -89,7 +89,7 @@ public class BidController {
     {
         List<BidEntity> bids = bidService.getAllBidsOnProduct(productId, userService.authentication().getName());
         if(bids.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Data Bids On Product Not Found"), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Get All Bid On Product", bids), HttpStatus.OK);
     }
