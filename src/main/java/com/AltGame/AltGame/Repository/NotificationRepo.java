@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 @Transactional
 public interface NotificationRepo extends JpaRepository<NotificationEntity, Integer> {
+    NotificationEntity findByNotificationId(int notificationId);
 }

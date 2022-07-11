@@ -39,4 +39,17 @@ public class NotificationService {
         notificationRepo.save(notificationEntity);
     }
 
+    public boolean updateStatus(String username, int notificationId, String status)
+    {
+        int userId = userService.getUserIdByUsername(username);
+//        VwNotificationEntity vwNotificationEntity = vwNotificationRepo.findByNotificationIdAndUserId(notificationId,userId);
+
+
+        NotificationEntity notificationEntity = notificationRepo.findByNotificationId(notificationId);
+        notificationEntity.setStatus(status);
+        notificationRepo.save(notificationEntity);
+
+        return true;
+    }
+
 }

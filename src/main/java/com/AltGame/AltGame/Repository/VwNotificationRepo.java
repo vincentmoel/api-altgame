@@ -12,4 +12,6 @@ import java.util.List;
 public interface VwNotificationRepo extends JpaRepository<VwNotificationEntity, Integer> {
     List<VwNotificationEntity> findAllByUserIdOrderByCreatedAtDesc(int userId);
 
+    VwNotificationEntity findByNotificationIdAndUserId(int notificationId, int userId);
+
 }
