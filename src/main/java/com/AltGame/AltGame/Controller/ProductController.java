@@ -8,6 +8,7 @@ import com.AltGame.AltGame.Service.ProductService;
 import java.io.IOException;
 
 import com.AltGame.AltGame.Service.UserService;
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,7 +58,7 @@ public class ProductController {
         if(productService.show(productId).isEmpty()){
             return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Products Data Not Found "), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Show Product", productService.show(productId)), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Show Product"), HttpStatus.OK);
     }
 
     // Save Data To Table
@@ -65,9 +66,7 @@ public class ProductController {
     public ResponseEntity<?> store(ProductDto pDto, @RequestParam("image") MultipartFile image) throws IOException {
         pDto.setImage(image);
         if(categoryService.exitsByCategoryId(pDto.getCategoryId())){
-
             return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Category Not Found"), HttpStatus.NOT_FOUND);
-
         }else if(!productService.validationStoreProduct(userService.authentication().getName())){
             return new ResponseEntity<>(new ResponseDto().responseBuilder("400", "Product Maximum 4"), HttpStatus.BAD_REQUEST);
         }

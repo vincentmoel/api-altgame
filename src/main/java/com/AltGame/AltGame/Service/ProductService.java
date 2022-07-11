@@ -5,6 +5,10 @@ import com.AltGame.AltGame.Entity.ProductEntity;
 import com.AltGame.AltGame.Entity.VwProductEntity;
 import com.AltGame.AltGame.Repository.ProductRepo;
 import com.AltGame.AltGame.Repository.VwProductRepo;
+import com.cloudinary.Api;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +17,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
     @Autowired
     ProductRepo productRepo;
@@ -21,6 +26,8 @@ public class ProductService {
     @Autowired
     VwProductRepo vwProductRepo;
 
+    private final Cloudinary cloudinary;
+
     public List<VwProductEntity> index() {
         return vwProductRepo.findAllByStatus("active");
     }
@@ -28,6 +35,8 @@ public class ProductService {
     public List<VwProductEntity> searchByName(String search) {
         return vwProductRepo.findByStatusAndNameLike("active", "%" + search + "%");
     }
+
+
 
     public List<VwProductEntity> showUserProducts(String username) {
         return vwProductRepo.findByStatusAndUsername("active", username);
@@ -42,7 +51,7 @@ public class ProductService {
         ProductEntity pEntity = new ProductEntity();
         int userId = userService.getUserIdByUsername(username);
         pEntity.setUserId(userId);
-        pEntity.setImage(pDto.getImage().getBytes());
+        pEntity.setImage(cloudinary.uploader().upload(pDto.getImage().getBytes(), ObjectUtils.emptyMap()).get("url").toString());
         pEntity.setProductId(pDto.getProductId());
         pEntity.setName(pDto.getName());
         pEntity.setCategoryId(pDto.getCategoryId());
@@ -59,7 +68,7 @@ public class ProductService {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         ProductEntity pEntity = productRepo.findByProductIdAndUserId(productId, userId);
 
-        pEntity.setImage(pDto.getImage().getBytes());
+//        pEntity.setImage(pDto.getImage().getBytes());
         pEntity.setCategoryId(pDto.getCategoryId());
         pEntity.setName(pDto.getName());
         pEntity.setPrice(pDto.getPrice());
@@ -88,7 +97,6 @@ public class ProductService {
         ProductEntity product = productRepo.findByProductId(productId);
         product.setStatus(status);
         productRepo.save(product);
-
         return true;
     }
 }

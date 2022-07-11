@@ -29,9 +29,8 @@ public class ProductEntity {
     @Column(name = "price")
     private int price;
 
-    @Lob
     @Column(name = "image")
-    private byte[] image;
+    private String image;
 
     @Column(name = "status")
     private String status;

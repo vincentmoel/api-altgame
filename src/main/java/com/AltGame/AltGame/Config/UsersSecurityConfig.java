@@ -1,6 +1,8 @@
 package com.AltGame.AltGame.Config;
 
 import com.AltGame.AltGame.Dto.ResponseDto;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -37,6 +39,14 @@ public class UsersSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+    }
+
+    @Bean
+    public Cloudinary getAccount(){
+        return new Cloudinary(ObjectUtils.asMap(
+                "cloud_name", "alt-game",
+                "api_key", "418412152646768",
+                "api_secret", "gy-7J6VEp7u5JWG6FOem12YDUC8"));
     }
 
     @Bean
