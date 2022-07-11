@@ -58,7 +58,7 @@ public class ProductController {
         if(productService.show(productId).isEmpty()){
             return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Products Data Not Found "), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Show Product"), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Show Product",productService.show(productId)), HttpStatus.OK);
     }
 
     // Save Data To Table
