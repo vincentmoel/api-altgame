@@ -43,13 +43,21 @@ public class ProductController {
         return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Search", productService.searchByName(search)),HttpStatus.OK);
     }
 
-    // Show All User Products
+    // Show All User Products (Other Seller)
     @GetMapping(path = "/{username}")
     public ResponseEntity<?> showUserProducts(@PathVariable String username) {
         if(productService.showUserProducts(username).isEmpty()){
             return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Products Data Not Found "), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Show User Products", productService.showUserProducts(username)), HttpStatus.OK);
+    }
+
+    // Show All My Products (Seller)
+    @GetMapping(path = "/my-products")
+    public ResponseEntity<?> showMyProducts()
+    {
+        String username = userService.authentication().getName();
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Show My Products (Seller)", productService.showMyProducts(username)), HttpStatus.OK);
     }
 
     // Get One Data From Table

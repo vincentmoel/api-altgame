@@ -19,4 +19,6 @@ public interface VwProductRepo extends JpaRepository<VwProductEntity, Integer> {
     List<VwProductEntity> findByProductId(int productId);
 
     List<VwProductEntity> findByUsernameAndStatusOrStatus(String username, String active, String waiting);
+
+    List<VwProductEntity> findByUsernameAndStatusIn(String username, List<String> statuses);
 }

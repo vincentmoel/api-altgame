@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -42,6 +43,15 @@ public class ProductService {
         return vwProductRepo.findByStatusAndUsername("active", username);
     }
 
+    public List<VwProductEntity> showMyProducts(String username)
+    {
+        List<String> statuses = new ArrayList<>();
+        statuses.add("active");
+        statuses.add("bidded");
+
+        return vwProductRepo.findByUsernameAndStatusIn(username, statuses);
+    }
+
     public List<VwProductEntity> show(int productId) {
         return vwProductRepo.findByProductId(productId);
     }
@@ -67,7 +77,6 @@ public class ProductService {
         int userId = userService.getUserIdByUsername(username);
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         ProductEntity pEntity = productRepo.findByProductIdAndUserId(productId, userId);
-
         pEntity.setImage(cloudinary.uploader().upload(pDto.getImage().getBytes(), ObjectUtils.emptyMap()).get("url").toString());
         pEntity.setCategoryId(pDto.getCategoryId());
         pEntity.setName(pDto.getName());
