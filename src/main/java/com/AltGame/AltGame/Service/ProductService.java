@@ -68,7 +68,7 @@ public class ProductService {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         ProductEntity pEntity = productRepo.findByProductIdAndUserId(productId, userId);
 
-//        pEntity.setImage(pDto.getImage().getBytes());
+        pEntity.setImage(cloudinary.uploader().upload(pDto.getImage().getBytes(), ObjectUtils.emptyMap()).get("url").toString());
         pEntity.setCategoryId(pDto.getCategoryId());
         pEntity.setName(pDto.getName());
         pEntity.setPrice(pDto.getPrice());
