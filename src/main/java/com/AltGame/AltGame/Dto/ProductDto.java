@@ -13,7 +13,7 @@ public class ProductDto {
     private String name;
     private String description;
     private int price;
-    private MultipartFile image;
+    private String image;
     private String status;
     private Date createdAt;
     private Date updatedAt;
