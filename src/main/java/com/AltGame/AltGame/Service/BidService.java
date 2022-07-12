@@ -63,6 +63,8 @@ public class BidService {
         bid.setCreatedAt(timestamp);
         bid.setUpdatedAt(timestamp);
 
+        productService.setProductStatus(bidDto.getProductId(),"bidded");
+
         bidRepo.save(bid);
     }
 
