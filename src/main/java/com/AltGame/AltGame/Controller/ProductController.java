@@ -2,6 +2,8 @@ package com.AltGame.AltGame.Controller;
 
 import com.AltGame.AltGame.Dto.ProductDto;
 import com.AltGame.AltGame.Dto.ResponseDto;
+import com.AltGame.AltGame.Entity.VwProductEntity;
+import com.AltGame.AltGame.Repository.VwProductRepo;
 import com.AltGame.AltGame.Service.CategoryService;
 import com.AltGame.AltGame.Service.ProductService;
 
@@ -34,39 +36,18 @@ public class ProductController {
         return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Index Products", productService.index()), HttpStatus.OK);
     }
 
-    // Search Product
-    @GetMapping(path = "")
-    public ResponseEntity<?> searchProducts(@RequestParam(name = "search") String search) {
-        if(productService.searchByName(search).isEmpty()){
-            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Products Data Not Found "), HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Search", productService.searchByName(search)),HttpStatus.OK);
-    }
-
-    // Show All User Products (Other Seller)
-    @GetMapping(path = "/{username}")
-    public ResponseEntity<?> showUserProducts(@PathVariable String username) {
-        if(productService.showUserProducts(username).isEmpty()){
-            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Products Data Not Found "), HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Show User Products", productService.showUserProducts(username)), HttpStatus.OK);
-    }
-
-    // Show All My Products (Seller)
-    @GetMapping(path = "/my-products")
-    public ResponseEntity<?> showMyProducts()
-    {
-        String username = userService.authentication().getName();
-        return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Show My Products (Seller)", productService.showMyProducts(username)), HttpStatus.OK);
-    }
-
     // Get One Data From Table
     @GetMapping(path = "/show/{productId}")
     public ResponseEntity<?> show(@PathVariable int productId) {
-        if(productService.show(productId).isEmpty()){
-            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Products Data Not Found "), HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Show Product",productService.show(productId)), HttpStatus.OK);
+//        if(productService.show(productId).isEmpty()){
+//            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Products Data Not Found "), HttpStatus.NOT_FOUND);
+//        }
+        VwProductEntity product = productService.show(productId);
+        userService.getUserByUsername(product.getUsername());
+
+        
+
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Show Product",product), HttpStatus.OK);
     }
 
     // Save Data To Table
@@ -104,4 +85,31 @@ public class ProductController {
 
         return new ResponseEntity<>( new ResponseDto().responseBuilder("200", "Success Destroy Product"), HttpStatus.OK);
     }
+
+    // Search Product
+    @GetMapping(path = "")
+    public ResponseEntity<?> searchProducts(@RequestParam(name = "search") String search) {
+        if(productService.searchByName(search).isEmpty()){
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Products Data Not Found "), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Search", productService.searchByName(search)),HttpStatus.OK);
+    }
+
+    // Show All User Products (Other Seller)
+    @GetMapping(path = "/{username}")
+    public ResponseEntity<?> showUserProducts(@PathVariable String username) {
+        if(productService.showUserProducts(username).isEmpty()){
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Products Data Not Found "), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Show User Products", productService.showUserProducts(username)), HttpStatus.OK);
+    }
+
+    // Show All My Products (Seller)
+    @GetMapping(path = "/my-products")
+    public ResponseEntity<?> showMyProducts()
+    {
+        String username = userService.authentication().getName();
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Show My Products (Seller)", productService.showMyProducts(username)), HttpStatus.OK);
+    }
+
 }

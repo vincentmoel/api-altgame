@@ -52,7 +52,7 @@ public class ProductService {
         return vwProductRepo.findByUsernameAndStatusIn(username, statuses);
     }
 
-    public List<VwProductEntity> show(int productId) {
+    public VwProductEntity show(int productId) {
         return vwProductRepo.findByProductId(productId);
     }
 

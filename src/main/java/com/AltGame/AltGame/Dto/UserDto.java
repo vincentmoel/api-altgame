@@ -11,6 +11,7 @@ public class UserDto {
     private String email;
     private String password;
     private String phone;
+    private String city;
     private MultipartFile image;
     private String bankAccount;
 }

@@ -1,7 +1,7 @@
 package com.AltGame.AltGame.Controller;
 
-import com.AltGame.AltGame.Dto.RegisterDto;
 import com.AltGame.AltGame.Dto.ResponseDto;
+import com.AltGame.AltGame.Dto.UserDto;
 import com.AltGame.AltGame.Entity.RoleEntity;
 import com.AltGame.AltGame.Entity.UserEntity;
 import com.AltGame.AltGame.Service.UserService;
@@ -33,12 +33,12 @@ public class LoginController {
     UserService userService;
 
     @PostMapping(value = "/api/signup")
-    public ResponseEntity<?> createNewUser(@RequestBody RegisterDto registerDto) {
-        UserEntity user = userService.getUserByUsername(registerDto.getUsername());
-        if(userService.exitsByEmail(registerDto.getUsername())){
+    public ResponseEntity<?> createNewUser(@RequestBody UserDto userDto) {
+        UserEntity user = userService.getUserByUsername(userDto.getUsername());
+        if(userService.exitsByEmail(userDto.getUsername())){
             return new ResponseEntity<>(new ResponseDto().responseBuilder("400","Error Email Already Exist"), HttpStatus.BAD_REQUEST);
         }else if(Objects.isNull(user)){
-            return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Register User",userService.store(registerDto)), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Register User",userService.store(userDto)), HttpStatus.OK);
         }else{
             return new ResponseEntity<>(new ResponseDto().responseBuilder("400","Error Username Already Exist"), HttpStatus.BAD_REQUEST);
         }

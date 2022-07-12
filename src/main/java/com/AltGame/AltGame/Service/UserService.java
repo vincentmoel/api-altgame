@@ -10,6 +10,7 @@ import com.AltGame.AltGame.Repository.VwUserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,19 +32,20 @@ public class UserService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return auth;
     }
-    public RegisterDto store(RegisterDto registerDto){
+    public UserDto store(UserDto userDto){
         UserEntity user = new UserEntity();
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        user.setUsername(registerDto.getUsername());
-        user.setPassword(bCryptPasswordEncoder.encode(registerDto.getPassword()));
-        user.setName(registerDto.getName());
-        user.setEmail(registerDto.getEmail());
-        user.setPhone(registerDto.getPhone());
+        user.setUsername(userDto.getUsername());
+        user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
+        user.setName(userDto.getName());
+        user.setEmail(userDto.getEmail());
+        user.setPhone(userDto.getPhone());
+        user.setCity(userDto.getCity());
         user.setRoleId(1);
         user.setCreatedAt(timestamp);
         user.setCreatedAt(timestamp);
         userRepo.save(user);
-        return registerDto;
+        return userDto;
     }
     public void update(UserDto userDto) throws IOException {
         UserEntity user = userRepo.findByUsername(userDto.getUsername());
@@ -53,6 +55,7 @@ public class UserService {
         user.setImage(userDto.getImage().getBytes());
         user.setEmail(userDto.getEmail());
         user.setPhone(userDto.getPhone());
+        user.setCity(userDto.getCity());
         user.setUpdatedAt(timestamp);
         if(userDto.getImage().getSize() > 0){
             user.setImage(userDto.getImage().getBytes());
