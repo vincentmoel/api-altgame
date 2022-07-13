@@ -2,12 +2,16 @@ package com.AltGame.AltGame.Controller;
 
 import com.AltGame.AltGame.Dto.ProductDto;
 import com.AltGame.AltGame.Dto.ResponseDto;
+import com.AltGame.AltGame.Dto.ResponseProduct;
 import com.AltGame.AltGame.Entity.VwProductEntity;
 import com.AltGame.AltGame.Repository.VwProductRepo;
 import com.AltGame.AltGame.Service.CategoryService;
 import com.AltGame.AltGame.Service.ProductService;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import com.AltGame.AltGame.Service.UserService;
 import com.cloudinary.utils.ObjectUtils;
@@ -43,11 +47,24 @@ public class ProductController {
 //            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Products Data Not Found "), HttpStatus.NOT_FOUND);
 //        }
         VwProductEntity product = productService.show(productId);
-        userService.getUserByUsername(product.getUsername());
+        userService.getUserInfoByUsername(product.getUsername());
+//
+//        LinkedHashMap<?,?> hm = new LinkedHashMap<>();
+//        hm.put()
 
-        
+        ResponseProduct responseProduct = new ResponseProduct();
+        responseProduct.setProductId(product.getProductId());
+        responseProduct.setUsername(product.getUsername());
+        responseProduct.setCategory(product.getCategory());
+        responseProduct.setName(product.getName());
+        responseProduct.setPrice(product.getPrice());
+        responseProduct.setImage(product.getImage());
+        responseProduct.setStatus(product.getStatus());
+        responseProduct.setCreatedAt(product.getCreatedAt());
+        responseProduct.setUpdatedAt(product.getUpdatedAt());
+        responseProduct.setUser(userService.getUserInfoByUsername(product.getUsername()));
 
-        return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Show Product",product), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Show Product",responseProduct), HttpStatus.OK);
     }
 
     // Save Data To Table

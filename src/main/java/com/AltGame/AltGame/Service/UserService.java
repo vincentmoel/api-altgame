@@ -78,6 +78,21 @@ public class UserService {
     public UserEntity getUserByUsername(String username){
         return userRepo.findByUsername(username);
     }
+
+    public UserInformationDto getUserInfoByUsername(String username)
+    {
+        UserEntity userEntity = userRepo.findByUsername(username);
+        UserInformationDto userInfo = new UserInformationDto();
+
+        userInfo.setName(userEntity.getName());
+        userInfo.setUsername(userEntity.getUsername());
+        userInfo.setEmail(userEntity.getEmail());
+        userInfo.setPhone(userEntity.getPhone());
+        userInfo.setCity(userEntity.getCity());
+
+        return userInfo;
+    }
+
     public Integer getUserIdByUsername(String username) {
         UserEntity userEntity = userRepo.findByUsername(username);
         return userEntity.getUserId();

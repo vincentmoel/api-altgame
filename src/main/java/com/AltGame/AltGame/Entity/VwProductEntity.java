@@ -1,5 +1,6 @@
 package com.AltGame.AltGame.Entity;
 
+import com.AltGame.AltGame.Dto.UserInformationDto;
 import lombok.Data;
 
 import javax.persistence.*;
