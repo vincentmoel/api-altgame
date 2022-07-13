@@ -6,9 +6,7 @@ import com.AltGame.AltGame.Service.UserService;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,9 +20,11 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.ws.Service;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -32,11 +32,14 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 public class RefreshToken extends UsernamePasswordAuthenticationFilter {
 
-
     private final AuthenticationManager authenticationManager;
 
-    public RefreshToken(AuthenticationManager authenticationManager){
+    public UserService userService;
+
+    public RefreshToken(AuthenticationManager authenticationManager, ApplicationContext ctx){
         this.authenticationManager = authenticationManager;
+        this.userService = ctx.getBean(UserService.class);
+
     }
 
     @Override
@@ -49,8 +52,14 @@ public class RefreshToken extends UsernamePasswordAuthenticationFilter {
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
-        Map<String,String> token = new HashMap<>();
+        UserEntity getUser = userService.getUserByUsername(user.getUsername());
+        LinkedHashMap<String,Object> vwUser = new  LinkedHashMap<>();
+        vwUser.put("userId",getUser.getUserId());
+        vwUser.put("name", getUser.getName());
+        vwUser.put("city", getUser.getCity());
+        Map<String,Object> token = new HashMap<>();
         token.put("access_token", accessToken);
+        token.put("user", vwUser);
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), new ResponseDto().responseBuilder("202","Succes Login",token));

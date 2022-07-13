@@ -32,7 +32,7 @@ public class UserService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return auth;
     }
-    public UserDto store(UserDto userDto){
+    public void store(UserDto userDto){
         UserEntity user = new UserEntity();
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         user.setUsername(userDto.getUsername());
@@ -45,7 +45,6 @@ public class UserService {
         user.setCreatedAt(timestamp);
         user.setCreatedAt(timestamp);
         userRepo.save(user);
-        return userDto;
     }
     public void update(UserDto userDto) throws IOException {
         UserEntity user = userRepo.findByUsername(userDto.getUsername());

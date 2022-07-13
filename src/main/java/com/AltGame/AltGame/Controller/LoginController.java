@@ -38,7 +38,8 @@ public class LoginController {
         if(userService.exitsByEmail(userDto.getUsername())){
             return new ResponseEntity<>(new ResponseDto().responseBuilder("400","Error Email Already Exist"), HttpStatus.BAD_REQUEST);
         }else if(Objects.isNull(user)){
-            return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Register User",userService.store(userDto)), HttpStatus.OK);
+            userService.store(userDto);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Register User"), HttpStatus.OK);
         }else{
             return new ResponseEntity<>(new ResponseDto().responseBuilder("400","Error Username Already Exist"), HttpStatus.BAD_REQUEST);
         }

@@ -1,10 +1,12 @@
 package com.AltGame.AltGame.Config;
 
 import com.AltGame.AltGame.Dto.ResponseDto;
+import com.AltGame.AltGame.Service.UserService;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -76,7 +78,7 @@ public class UsersSecurityConfig extends WebSecurityConfigurerAdapter {
 //        http.authorizeRequests().antMatchers("/api/products/**").hasAnyAuthority("seller");
         http.authorizeRequests().antMatchers( "/api/**").hasAnyAuthority("buyer","seller");
         http.authorizeRequests().anyRequest().authenticated();
-        RefreshToken refreshToken = new RefreshToken(authenticationManagerBean()); //customize url login
+        RefreshToken refreshToken = new RefreshToken(authenticationManagerBean(), getApplicationContext()); //customize url login
         refreshToken.setFilterProcessesUrl("/api/login"); //customize url login
         http.addFilter(refreshToken);//customize url login
         http.addFilterBefore(new CustomeAuthorFillter(), UsernamePasswordAuthenticationFilter.class);
