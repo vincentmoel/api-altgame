@@ -51,7 +51,6 @@ public class UserService {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         user.setUsername(userDto.getUsername());
         user.setName(userDto.getName());
-        user.setImage(userDto.getImage().getBytes());
         user.setEmail(userDto.getEmail());
         user.setPhone(userDto.getPhone());
         user.setCity(userDto.getCity());
