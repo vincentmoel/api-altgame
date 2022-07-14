@@ -2,6 +2,7 @@ package com.AltGame.AltGame.Controller;
 
 import com.AltGame.AltGame.Dto.BidDto;
 import com.AltGame.AltGame.Dto.ResponseDto;
+import com.AltGame.AltGame.Dto.UserInformationDto;
 import com.AltGame.AltGame.Entity.BidEntity;
 import com.AltGame.AltGame.Service.BidService;
 import com.AltGame.AltGame.Service.UserService;
@@ -87,11 +88,14 @@ public class BidController {
     @GetMapping(path="/all-bids-product/{productId}")
     public ResponseEntity<?> getAllBidsOnProduct(@PathVariable Integer productId)
     {
+
         List<BidEntity> bids = bidService.getAllBidsOnProduct(productId, userService.authentication().getName());
+
         if(bids.isEmpty()){
             return new ResponseEntity<>(new ResponseDto().responseBuilder("404","Data Bids On Product Not Found"), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Get All Bid On Product", bids), HttpStatus.OK);
+
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Get All Bid On Product", bidService.mergeResponse(bids)), HttpStatus.OK);
     }
 
     // Can be access by Product Owner only

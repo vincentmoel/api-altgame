@@ -95,6 +95,13 @@ public class UserService {
         UserEntity userEntity = userRepo.findByUsername(username);
         return userEntity.getUserId();
     }
+
+    public String getUsernameByUserId(Integer userId)
+    {
+        UserEntity userEntity = userRepo.findByUserId(userId);
+        return userEntity.getUsername();
+    }
+
     public boolean exitsByEmail(String email){
         return userRepo.existsByEmail(email);
     }

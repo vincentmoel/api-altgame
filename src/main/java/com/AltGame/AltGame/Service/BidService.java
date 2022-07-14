@@ -1,15 +1,19 @@
 package com.AltGame.AltGame.Service;
 
 import com.AltGame.AltGame.Dto.BidDto;
+import com.AltGame.AltGame.Dto.ResponseBid;
+import com.AltGame.AltGame.Dto.UserInformationDto;
 import com.AltGame.AltGame.Entity.BidEntity;
 import com.AltGame.AltGame.Entity.ProductEntity;
 import com.AltGame.AltGame.Repository.BidRepo;
 import com.AltGame.AltGame.Repository.InvoiceRepo;
 import com.AltGame.AltGame.Repository.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -103,6 +107,29 @@ public class BidService {
             return arrBid;
         }
         return null;
+    }
+
+    public List<Object> mergeResponse(List<BidEntity> bidEntities)
+    {
+        List<Object> bidsProduct = new ArrayList<>();
+        for (BidEntity bidEntity : bidEntities)
+        {
+            ResponseBid responseBid = new ResponseBid();
+            String username = userService.getUsernameByUserId(bidEntity.getUserId());
+            UserInformationDto userInformation = userService.getUserInfoByUsername(username);
+            responseBid.setBidId(bidEntity.getBidId());
+            responseBid.setProductId(bidEntity.getProductId());
+            responseBid.setPrice(bidEntity.getPrice());
+            responseBid.setStatus(bidEntity.getStatus());
+            responseBid.setCreatedAt(bidEntity.getCreatedAt());
+            responseBid.setAcceptedAt(bidEntity.getAcceptedAt());
+            responseBid.setUser(userInformation);
+
+            bidsProduct.add(responseBid);
+
+        }
+
+        return bidsProduct;
     }
 
     public boolean acceptBidBuyer(Integer bidId, String username)
