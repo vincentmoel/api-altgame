@@ -3,18 +3,13 @@ package com.AltGame.AltGame.Controller;
 import com.AltGame.AltGame.Dto.ProductDto;
 import com.AltGame.AltGame.Dto.ResponseDto;
 import com.AltGame.AltGame.Dto.ResponseProduct;
-import com.AltGame.AltGame.Entity.VwProductEntity;
-import com.AltGame.AltGame.Repository.VwProductRepo;
+import com.AltGame.AltGame.Entity.ProductEntity;
 import com.AltGame.AltGame.Service.CategoryService;
 import com.AltGame.AltGame.Service.ProductService;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import com.AltGame.AltGame.Service.UserService;
-import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,23 +41,22 @@ public class ProductController {
 //        if(productService.show(productId).isEmpty()){
 //            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Products Data Not Found "), HttpStatus.NOT_FOUND);
 //        }
-        VwProductEntity product = productService.show(productId);
-        userService.getUserInfoByUsername(product.getUsername());
+        ProductEntity product = productService.show(productId);
 //
 //        LinkedHashMap<?,?> hm = new LinkedHashMap<>();
 //        hm.put()
 
         ResponseProduct responseProduct = new ResponseProduct();
         responseProduct.setProductId(product.getProductId());
-        responseProduct.setUsername(product.getUsername());
-        responseProduct.setCategory(product.getCategory());
+        responseProduct.setCategory(categoryService.getCategory(product.getCategoryId()));
         responseProduct.setName(product.getName());
         responseProduct.setPrice(product.getPrice());
         responseProduct.setImage(product.getImage());
         responseProduct.setStatus(product.getStatus());
+        responseProduct.setDescription(product.getDescription());
         responseProduct.setCreatedAt(product.getCreatedAt());
         responseProduct.setUpdatedAt(product.getUpdatedAt());
-        responseProduct.setUser(userService.getUserInfoByUsername(product.getUsername()));
+        responseProduct.setUser(userService.getUserId(product.getUserId()));
 
         return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Show Product",responseProduct), HttpStatus.OK);
     }

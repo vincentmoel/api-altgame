@@ -16,6 +16,7 @@ public class ResponseProduct {
     private String name;
     private int price;
     private String image;
+    private String description;
     private String status;
     private Date createdAt;
     private Date updatedAt;

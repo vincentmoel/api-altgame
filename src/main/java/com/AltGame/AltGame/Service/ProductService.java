@@ -52,8 +52,8 @@ public class ProductService {
         return vwProductRepo.findByUsernameAndStatusIn(username, statuses);
     }
 
-    public VwProductEntity show(int productId) {
-        return vwProductRepo.findByProductId(productId);
+    public ProductEntity show(int productId) {
+        return productRepo.findByProductId(productId);
     }
 
     public void store(ProductDto pDto, String username) throws IOException {

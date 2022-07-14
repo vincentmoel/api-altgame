@@ -19,4 +19,9 @@ public class CategoryService {
     public boolean exitsByCategoryId(Integer id){
         return !categoryRepo.existsById(id);
     }
+
+    public String getCategory(int categoryId) {
+        CategoryEntity categoryEntity = categoryRepo.getById(categoryId);
+        return categoryEntity.getName();
+    }
 }
