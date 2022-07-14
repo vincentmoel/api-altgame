@@ -71,6 +71,7 @@ spring.mvc.pathmatch.matching-strategy = ANT_PATH_MATCHER
         u.email, 
         u.phone,
         u.bank_account,
+        u.city,
         u.image,
         r.name AS role
     FROM 

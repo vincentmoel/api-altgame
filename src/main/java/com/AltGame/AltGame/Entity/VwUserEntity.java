@@ -24,6 +24,9 @@ public class VwUserEntity {
     @Column(name="phone")
     private String phone;
 
+    @Column(name = "city")
+    private String city;
+
     @Column(name="bank_account")
     private String bankAccount;
 
