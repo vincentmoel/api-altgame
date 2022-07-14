@@ -91,6 +91,13 @@ public class UserService {
         return userInfo;
     }
 
+    public UserInformationDto getUserInfoByUserId(Integer userId)
+    {
+        String username = this.getUsernameByUserId(userId);
+        return this.getUserInfoByUsername(username);
+    }
+
+
     public Integer getUserIdByUsername(String username) {
         UserEntity userEntity = userRepo.findByUsername(username);
         return userEntity.getUserId();
@@ -114,14 +121,4 @@ public class UserService {
         return userEntity.getImage();
     }
 
-    public UserInformationDto getUserId(int userId) {
-        UserEntity userEntity = userRepo.findById(userId);
-        UserInformationDto userInformationDto = new UserInformationDto();
-        userInformationDto.setUsername(userEntity.getUsername());
-        userInformationDto.setCity(userEntity.getCity());
-        userInformationDto.setEmail(userEntity.getEmail());
-        userInformationDto.setName(userEntity.getName());
-        userInformationDto.setPhone(userEntity.getPhone());
-        return userInformationDto;
-    }
 }

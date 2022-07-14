@@ -56,7 +56,7 @@ public class ProductController {
         responseProduct.setDescription(product.getDescription());
         responseProduct.setCreatedAt(product.getCreatedAt());
         responseProduct.setUpdatedAt(product.getUpdatedAt());
-        responseProduct.setUser(userService.getUserId(product.getUserId()));
+        responseProduct.setUser(userService.getUserInfoByUserId(product.getUserId()));
 
         return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Show Product",responseProduct), HttpStatus.OK);
     }

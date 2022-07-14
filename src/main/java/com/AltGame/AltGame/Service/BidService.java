@@ -109,14 +109,13 @@ public class BidService {
         return null;
     }
 
-    public List<Object> mergeResponse(List<BidEntity> bidEntities)
+    public List<Object> createBidResponse(List<BidEntity> bidEntities)
     {
         List<Object> bidsProduct = new ArrayList<>();
         for (BidEntity bidEntity : bidEntities)
         {
             ResponseBid responseBid = new ResponseBid();
-            String username = userService.getUsernameByUserId(bidEntity.getUserId());
-            UserInformationDto userInformation = userService.getUserInfoByUsername(username);
+            UserInformationDto userInformation = userService.getUserInfoByUserId(bidEntity.getUserId());
             responseBid.setBidId(bidEntity.getBidId());
             responseBid.setProductId(bidEntity.getProductId());
             responseBid.setPrice(bidEntity.getPrice());
