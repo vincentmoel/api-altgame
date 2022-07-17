@@ -23,7 +23,7 @@ public class WishlistController {
 
     @GetMapping("/api/is-product-in-wishlist/{productId}")
     public ResponseEntity<?> isProductInWishlist(@PathVariable Integer productId){
-        Map<String, String> isInWishlist = wishlistService.isProductInWishlist(productId, userService.getUserIdByUsername(userService.authentication().getName()));
+        Map<String, Boolean> isInWishlist = wishlistService.isProductInWishlist(productId, userService.getUserIdByUsername(userService.authentication().getName()));
         return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Show Wishlist", isInWishlist), HttpStatus.OK);
 
     }

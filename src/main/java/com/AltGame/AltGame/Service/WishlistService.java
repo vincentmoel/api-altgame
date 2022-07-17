@@ -54,13 +54,13 @@ public class WishlistService {
 
 	}
 
-    public Map<String, String> isProductInWishlist(Integer productId, Integer userId) {
-		Map<String, String> respon = new HashMap<>();
+    public Map<String, Boolean> isProductInWishlist(Integer productId, Integer userId) {
+		Map<String, Boolean> response = new HashMap<>();
 		if(Objects.isNull(wishlistRepo.findByProductIdAndUserId(productId,userId))){
-			respon.put("in_wishlist","false");
+			response.put("in_wishlist",false);
 		}else{
-			respon.put("in_wishlist","true");
+			response.put("in_wishlist",true);
 		}
-		return respon;
+		return response;
     }
 }
