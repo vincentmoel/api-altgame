@@ -46,6 +46,12 @@ public class UserService {
         user.setCreatedAt(timestamp);
         userRepo.save(user);
     }
+    public void registerSeller(String bankAccount){
+        UserEntity user = userRepo.findByUsername(authentication().getName());
+        user.setBankAccount(bankAccount);
+        user.setRoleId(2);
+        userRepo.save(user);
+    }
     public void update(UserDto userDto) throws IOException {
         UserEntity user = userRepo.findByUsername(userDto.getUsername());
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());

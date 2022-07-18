@@ -18,6 +18,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @PostMapping("/register-seller")
+    public ResponseEntity<?> registerSeller(@RequestBody Map<String, Object> json){
+        userService.registerSeller(json.get("bankAccount").toString());
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Succes Register Seller"),HttpStatus.OK);
+    }
+
     @GetMapping("/get-user")
     public ResponseEntity<?> get_user(){
         Optional<VwUserEntity> vwUserEntity = userService.get_user(userService.authentication().getName());
