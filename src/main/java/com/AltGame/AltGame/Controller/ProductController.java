@@ -108,11 +108,11 @@ public class ProductController {
 
     // Show All User Products (Other Seller)
     @GetMapping(path = "/seller/{username}")
-    public ResponseEntity<?> showUserProducts(@PathVariable String username) {
-        if(productService.showUserProducts(username).isEmpty()){
+    public ResponseEntity<?> showSellerProducts(@PathVariable String username) {
+        if(productService.showSellerProducts(username).isEmpty()){
             return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Products Data Not Found "), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Show User Products", productService.showUserProducts(username)), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Show User Products", productService.showSellerProducts(username)), HttpStatus.OK);
     }
 
     // Show All My Products (Seller)

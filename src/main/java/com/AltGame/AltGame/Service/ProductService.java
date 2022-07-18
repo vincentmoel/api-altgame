@@ -36,22 +36,21 @@ public class ProductService {
     }
 
     public List<VwProductEntity> searchByName(String search) {
-        return vwProductRepo.findByStatusAndNameLike("active", "%" + search + "%");
+        List<String> statuses = new ArrayList<>();
+        statuses.add("active");
+        statuses.add("bidded");
+        return vwProductRepo.findByStatusInAndNameLike(statuses, "%" + search + "%");
     }
 
 
 
-    public List<VwProductEntity> showUserProducts(String username) {
-        return vwProductRepo.findByStatusAndUsername("active", username);
+    public List<VwProductEntity> showSellerProducts(String username) {
+        return vwProductRepo.findByUsername(username);
     }
 
     public List<VwProductEntity> showMyProducts(String username)
     {
-        List<String> statuses = new ArrayList<>();
-        statuses.add("active");
-        statuses.add("bidded");
-
-        return vwProductRepo.findByUsernameAndStatusIn(username, statuses);
+        return vwProductRepo.findByUsername(username);
     }
 
     public ProductEntity show(int productId) {
