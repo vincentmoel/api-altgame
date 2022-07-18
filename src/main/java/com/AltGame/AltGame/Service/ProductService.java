@@ -99,7 +99,10 @@ public class ProductService {
     }
 
     public boolean validationStoreProduct(String username){
-        List<VwProductEntity> product  = vwProductRepo.findByUsernameAndStatusOrStatus(username, "active", "waiting");
+        List<String> statuses = new ArrayList<>();
+        statuses.add("active");
+        statuses.add("bidded");
+        List<VwProductEntity> product  = vwProductRepo.findByUsernameAndStatusIn(username, statuses);
         return product.size() < 4;
     }
 
