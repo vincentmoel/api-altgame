@@ -5,7 +5,6 @@ import com.AltGame.AltGame.Entity.ProductEntity;
 import com.AltGame.AltGame.Entity.VwProductEntity;
 import com.AltGame.AltGame.Repository.ProductRepo;
 import com.AltGame.AltGame.Repository.VwProductRepo;
-import com.cloudinary.Api;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +29,10 @@ public class ProductService {
     private final Cloudinary cloudinary;
 
     public List<VwProductEntity> index() {
-        return vwProductRepo.findAllByStatus("active");
+        List<String> statuses = new ArrayList<>();
+        statuses.add("active");
+        statuses.add("bidded");
+        return vwProductRepo.findAllByStatusIn(statuses);
     }
 
     public List<VwProductEntity> searchByName(String search) {
