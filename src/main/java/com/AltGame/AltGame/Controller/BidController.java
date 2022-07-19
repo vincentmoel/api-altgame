@@ -30,7 +30,7 @@ public class BidController {
         if(bidService.index(userService.authentication().getName()).isEmpty()){
            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Bid Data Not Found"),HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Index Bid", bids), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Index Bid", bidService.createIndexBidsResponse(bids)), HttpStatus.OK);
     }
 
     // Get One Data From Table
@@ -93,7 +93,7 @@ public class BidController {
             return new ResponseEntity<>(new ResponseDto().responseBuilder("404","Data Bids On Product Not Found"), HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Get All Bid On Product", bidService.createBidResponse(bids)), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Get All Bid On Product", bidService.createAllBidsResponse(bids)), HttpStatus.OK);
     }
 
     // Can be access by Product Owner only

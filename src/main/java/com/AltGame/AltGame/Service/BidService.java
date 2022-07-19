@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -109,7 +110,7 @@ public class BidService {
         return null;
     }
 
-    public List<Object> createBidResponse(List<BidEntity> bidEntities)
+    public List<Object> createAllBidsResponse(List<BidEntity> bidEntities)
     {
 
         List<Object> bidsProduct = new ArrayList<>();
@@ -131,6 +132,26 @@ public class BidService {
         }
 
         return bidsProduct;
+    }
+
+    public LinkedHashMap<String, Object> createIndexBidsResponse(List<BidEntity> bidEntities)
+    {
+        LinkedHashMap<String, Object> response = new LinkedHashMap<>();
+        for (BidEntity bidEntity : bidEntities)
+        {
+            ProductEntity product = productService.show(bidEntity.getProductId());
+
+            response.put("bidId",bidEntity.getBidId());
+            response.put("product",product);
+            response.put("price",bidEntity.getPrice());
+            response.put("status",bidEntity.getStatus());
+            response.put("createdAt",bidEntity.getCreatedAt());
+            response.put("updatedAt",bidEntity.getUpdatedAt());
+            response.put("acceptedAt",bidEntity.getAcceptedAt());
+
+        }
+
+        return response;
     }
 
     public boolean acceptBidBuyer(Integer bidId, String username)
