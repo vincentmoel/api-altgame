@@ -4,7 +4,6 @@ import com.AltGame.AltGame.Dto.InvoiceDto;
 import com.AltGame.AltGame.Entity.BidEntity;
 import com.AltGame.AltGame.Entity.InvoiceEntity;
 import com.AltGame.AltGame.Entity.VwInvoiceEntity;
-import com.AltGame.AltGame.Entity.VwUserEntity;
 import com.AltGame.AltGame.Repository.BidRepo;
 import com.AltGame.AltGame.Repository.InvoiceRepo;
 import com.AltGame.AltGame.Repository.VwInvoiceRepo;
@@ -17,8 +16,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class InvoiceService {
@@ -93,7 +90,7 @@ public class InvoiceService {
 
     public List<VwInvoiceEntity> index(String usernameBuyer)
     {
-        return vwInvoiceRepo.findByBuyer(usernameBuyer);
+        return vwInvoiceRepo.findAllByBuyer(usernameBuyer);
     }
 
 

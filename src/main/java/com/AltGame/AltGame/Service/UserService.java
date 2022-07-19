@@ -75,7 +75,6 @@ public class UserService {
     }
 
     public Optional<VwUserEntity> get_user(String username){
-        Optional<VwUserEntity> vwUserEntity = vwUserRepo.findByUsername(username);
         return vwUserRepo.findByUsername(username);
     }
 

@@ -112,6 +112,7 @@ SELECT
 	i.created_at,
 	i.updated_at, 
 	b.price AS bid_price,
+	b.bid_id,
 	(SELECT username FROM users WHERE users.user_id = b.user_id) AS buyer , 
 	(SELECT phone FROM users WHERE users.user_id = b.user_id) AS phone , 
 	p.name, 

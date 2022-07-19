@@ -31,6 +31,7 @@ public class UserController {
             return new ResponseEntity<>(new ResponseDto("404", "User Not Found"), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(new ResponseDto("200", "Success Get Data", vwUserEntity), HttpStatus.OK);
+
     }
     @PostMapping("/update")
     public ResponseEntity<?> update(UserDto userDto, @RequestParam("image") MultipartFile image) throws IOException {

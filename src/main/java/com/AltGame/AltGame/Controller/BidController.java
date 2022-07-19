@@ -87,7 +87,6 @@ public class BidController {
     @GetMapping(path="/all-bids-product/{productId}")
     public ResponseEntity<?> getAllBidsOnProduct(@PathVariable Integer productId)
     {
-
         List<BidEntity> bids = bidService.getAllBidsOnProduct(productId, userService.authentication().getName());
 
         if(bids.isEmpty()){

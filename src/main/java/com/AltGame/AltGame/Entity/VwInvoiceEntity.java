@@ -46,9 +46,8 @@ public class VwInvoiceEntity {
     @Column(name = "product_price")
     private int productPrice;
 
-    @Lob
-    @Column(name="image")
-    private byte[] image;
+    @Column(name = "image")
+    private String image;
 
     @Column(name = "seller")
     private String seller;

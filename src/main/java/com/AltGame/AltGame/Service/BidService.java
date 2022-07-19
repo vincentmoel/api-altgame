@@ -111,9 +111,11 @@ public class BidService {
 
     public List<Object> createBidResponse(List<BidEntity> bidEntities)
     {
+
         List<Object> bidsProduct = new ArrayList<>();
         for (BidEntity bidEntity : bidEntities)
         {
+
             ResponseBid responseBid = new ResponseBid();
             UserInformationDto userInformation = userService.getUserInfoByUserId(bidEntity.getUserId());
             responseBid.setBidId(bidEntity.getBidId());
