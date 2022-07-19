@@ -83,13 +83,19 @@ public class InvoiceService {
     public boolean exitsByNoInvoice(String noInvoice){
         return invoiceRepo.existsByNoInvoice(noInvoice);
     }
+//
+//    public List<VwInvoiceEntity> index(Optional<VwUserEntity> vwUserEntity) {
+//        if(Objects.equals(vwUserEntity.get().getRole(), "buyer")){
+//            return vwInvoiceRepo.findByBuyer(vwUserEntity.get().getUsername());
+//        }
+//        return vwInvoiceRepo.findBySellerOrBuyer(vwUserEntity.get().getUsername(),vwUserEntity.get().getUsername());
+//    }
 
-    public List<VwInvoiceEntity> index(Optional<VwUserEntity> vwUserEntity) {
-        if(Objects.equals(vwUserEntity.get().getRole(), "buyer")){
-            return vwInvoiceRepo.findByBuyer(vwUserEntity.get().getUsername());
-        }
-        return vwInvoiceRepo.findBySellerOrBuyer(vwUserEntity.get().getUsername(),vwUserEntity.get().getUsername());
+    public List<VwInvoiceEntity> index(String usernameBuyer)
+    {
+        return vwInvoiceRepo.findByBuyer(usernameBuyer);
     }
+
 
     public List<VwInvoiceEntity> show(String id) {
         return vwInvoiceRepo.findByNoInvoice(id);

@@ -2,6 +2,7 @@ package com.AltGame.AltGame.Controller;
 
 import com.AltGame.AltGame.Dto.InvoiceDto;
 import com.AltGame.AltGame.Dto.ResponseDto;
+import com.AltGame.AltGame.Entity.VwInvoiceEntity;
 import com.AltGame.AltGame.Service.InvoiceService;
 import com.AltGame.AltGame.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/invoices")
@@ -23,10 +25,11 @@ public class InvoiceController {
     @GetMapping("/index")
     public ResponseEntity<?> index()
     {
-        if(invoiceService.index(userService.get_user(userService.authentication().getName())).isEmpty()){
+        List<VwInvoiceEntity> invoices = invoiceService.index(userService.authentication().getName());
+        if(invoices.isEmpty()){
             return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Invoice Data Not Found"), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Index Invoices", invoiceService.index(userService.get_user(userService.authentication().getName()))), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Index Invoices", invoices), HttpStatus.OK);
     }
 
     @GetMapping("/show/{id}")
