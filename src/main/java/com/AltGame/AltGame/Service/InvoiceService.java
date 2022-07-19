@@ -97,7 +97,7 @@ public class InvoiceService {
     }
 
 
-    public List<VwInvoiceEntity> show(String id) {
-        return vwInvoiceRepo.findByNoInvoice(id);
+    public VwInvoiceEntity showByBidId(int bidId) {
+        return vwInvoiceRepo.findByBidId(bidId);
     }
 }

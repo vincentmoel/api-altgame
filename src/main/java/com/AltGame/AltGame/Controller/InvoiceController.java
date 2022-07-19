@@ -32,23 +32,24 @@ public class InvoiceController {
         return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Index Invoices", invoices), HttpStatus.OK);
     }
 
-    @GetMapping("/show/{id}")
-    public ResponseEntity<?> showById(@PathVariable String id){
-        if(invoiceService.show(id).isEmpty()){
-            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Invoice Data Not Found"), HttpStatus.NOT_FOUND);
-
-        }
-        return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Succes Show Inovice",invoiceService.show(id)), HttpStatus.OK) ;
+    @GetMapping("/show/{bidId}")
+    public ResponseEntity<?> showByBidId(@PathVariable int bidId){
+//        if(invoiceService.showByBidId(bidId).isEmpty()){
+//            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Invoice Data Not Found"), HttpStatus.NOT_FOUND);
+//
+//        }
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Show Invoice",invoiceService.showByBidId(bidId)), HttpStatus.OK) ;
     }
 
-    // Update Data To Table
-    @PostMapping("/pay/{id}")
-    public ResponseEntity<?> update(InvoiceDto invoiceDto, @RequestParam("image") MultipartFile image, @PathVariable String id) throws IOException {
+//  Update Data To Table
+    @PostMapping("/pay/{bidId}")
+    public ResponseEntity<?> update(InvoiceDto invoiceDto, @RequestParam("image") MultipartFile image, @PathVariable int bidId) throws IOException {
         invoiceDto.setImage(image);
-        invoiceDto.setNoInvoice(id);
+        VwInvoiceEntity invoice = invoiceService.showByBidId(bidId);
+        invoiceDto.setNoInvoice(invoice.getNoInvoice());
         if(invoiceService.exitsByNoInvoice(invoiceDto.getNoInvoice())){
             invoiceService.update(invoiceDto);
-            return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Succes Pay"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Pay"), HttpStatus.OK);
         }
         return new ResponseEntity<>(new ResponseDto().responseBuilder("400","Failed Pay"), HttpStatus.BAD_REQUEST);
     }

@@ -28,6 +28,9 @@ public class VwInvoiceEntity {
     @Column(name="updated_at")
     private Date updatedAt;
 
+    @Column(name ="bid_id")
+    private int bidId;
+
     @Column(name ="bid_price")
     private int bidPrice;
 
