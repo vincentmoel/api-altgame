@@ -16,9 +16,8 @@ public class VwNotificationEntity {
     @Column(name = "product_name")
     private String productName;
 
-    @Lob
     @Column(name = "product_image")
-    private byte[] productImage;
+    private String productImage;
 
     @Column(name = "product_price")
     private int productPrice;
