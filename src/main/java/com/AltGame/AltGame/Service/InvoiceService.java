@@ -55,6 +55,8 @@ public class InvoiceService {
         invoiceEntity.setUpdatedAt(timestamp);
         BidEntity bidEntity = bidRepo.findByBidId(invoiceEntity.getBidId());
         productService.setProductStatus(bidEntity.getProductId(), "sold");
+        bidEntity.setStatus("finish");
+        bidRepo.save(bidEntity);
         invoiceRepo.save(invoiceEntity);
     }
 
