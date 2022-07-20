@@ -134,8 +134,9 @@ public class BidService {
         return bidsProduct;
     }
 
-    public LinkedHashMap<String, Object> createIndexBidsResponse(List<BidEntity> bidEntities)
+    public List<Object> createIndexBidsResponse(List<BidEntity> bidEntities)
     {
+        List<Object> bids = new ArrayList<>();
         LinkedHashMap<String, Object> response = new LinkedHashMap<>();
         for (BidEntity bidEntity : bidEntities)
         {
@@ -149,9 +150,10 @@ public class BidService {
             response.put("updatedAt",bidEntity.getUpdatedAt());
             response.put("acceptedAt",bidEntity.getAcceptedAt());
 
+            bids.add(response);
         }
 
-        return response;
+        return bids;
     }
 
     public boolean acceptBidBuyer(Integer bidId, String username)

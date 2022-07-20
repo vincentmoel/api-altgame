@@ -27,7 +27,7 @@ public class BidController {
     public ResponseEntity<?> index()
     {
         List<BidEntity> bids = bidService.index(userService.authentication().getName());
-        if(bidService.index(userService.authentication().getName()).isEmpty()){
+        if(bids.isEmpty()){
            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Bid Data Not Found"),HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Index Bid", bidService.createIndexBidsResponse(bids)), HttpStatus.OK);
