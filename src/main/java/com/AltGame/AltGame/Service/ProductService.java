@@ -62,7 +62,9 @@ public class ProductService {
         ProductEntity pEntity = new ProductEntity();
         int userId = userService.getUserIdByUsername(username);
         pEntity.setUserId(userId);
-        pEntity.setImage(cloudinary.uploader().upload(pDto.getImage().getBytes(), ObjectUtils.emptyMap()).get("url").toString());
+        if(pDto.getImage().getSize() > 0){
+            pEntity.setImage(cloudinary.uploader().upload(pDto.getImage().getBytes(), ObjectUtils.emptyMap()).get("url").toString());
+        }
         pEntity.setProductId(pDto.getProductId());
         pEntity.setName(pDto.getName());
         pEntity.setCategoryId(pDto.getCategoryId());
@@ -78,7 +80,9 @@ public class ProductService {
         int userId = userService.getUserIdByUsername(username);
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         ProductEntity pEntity = productRepo.findByProductIdAndUserId(productId, userId);
-        pEntity.setImage(cloudinary.uploader().upload(pDto.getImage().getBytes(), ObjectUtils.emptyMap()).get("url").toString());
+        if(pDto.getImage().getSize() > 0){
+            pEntity.setImage(cloudinary.uploader().upload(pDto.getImage().getBytes(), ObjectUtils.emptyMap()).get("url").toString());
+        }
         pEntity.setCategoryId(pDto.getCategoryId());
         pEntity.setName(pDto.getName());
         pEntity.setPrice(pDto.getPrice());
