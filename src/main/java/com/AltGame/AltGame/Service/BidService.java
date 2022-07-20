@@ -137,11 +137,10 @@ public class BidService {
     public List<Object> createIndexBidsResponse(List<BidEntity> bidEntities)
     {
         List<Object> bids = new ArrayList<>();
-        LinkedHashMap<String, Object> response = new LinkedHashMap<>();
         for (BidEntity bidEntity : bidEntities)
         {
             ProductEntity product = productService.show(bidEntity.getProductId());
-
+            LinkedHashMap<String, Object> response = new LinkedHashMap<>();
             response.put("bidId",bidEntity.getBidId());
             response.put("product",product);
             response.put("price",bidEntity.getPrice());
