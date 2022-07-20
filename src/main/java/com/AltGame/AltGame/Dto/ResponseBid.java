@@ -1,12 +1,10 @@
 package com.AltGame.AltGame.Dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.Date;
 
-@Setter
-@Getter
+@Data
 public class ResponseBid {
 
 

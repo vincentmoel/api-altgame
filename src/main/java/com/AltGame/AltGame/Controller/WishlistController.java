@@ -1,5 +1,6 @@
 package com.AltGame.AltGame.Controller;
 
+import com.AltGame.AltGame.Dto.ResponseWhishlist;
 import com.AltGame.AltGame.Entity.WishlistEntity;
 import com.AltGame.AltGame.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class WishlistController {
     // Get All Data From Table
     @GetMapping("/api/wishlists/index")
     public ResponseEntity<?> index() {
-        List<WishlistEntity> wishlists = wishlistService.index(userService.authentication().getName());
+        List<ResponseWhishlist> wishlists = wishlistService.index(userService.authentication().getName());
         return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Find Wishlists", wishlists), HttpStatus.OK);
     }
 

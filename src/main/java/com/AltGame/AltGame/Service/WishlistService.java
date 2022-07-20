@@ -1,11 +1,9 @@
 package com.AltGame.AltGame.Service;
 
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
+import com.AltGame.AltGame.Dto.ResponseWhishlist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +17,23 @@ public class WishlistService {
 	WishlistRepo wishlistRepo;
 	@Autowired
 	UserService userService;
+	@Autowired
+	ProductService productService;
 
-	public List<WishlistEntity> index(String username)
+	public List<ResponseWhishlist> index(String username)
 	{
 		int userId = userService.getUserIdByUsername(username);
-		return wishlistRepo.findByUserId(userId);
+		List<ResponseWhishlist> responseWhishlists = new ArrayList<>();
+		for(WishlistEntity i : wishlistRepo.findByUserId(userId)){
+			ResponseWhishlist temp = new ResponseWhishlist();
+			temp.setWishlistId(i.getWishlistId());
+			temp.setUser(userService.getUserInfoByUserId(userId));
+			temp.setProduct(productService.show(i.getProductId()));
+			temp.setCreatedAt(i.getCreatedAt());
+			temp.setUpdatedAt(i.getUpdatedAt());
+			responseWhishlists.add(temp);
+		}
+		return responseWhishlists;
 	}
 
 	public WishlistEntity store(WishlistDto wishlistDto, String username)
