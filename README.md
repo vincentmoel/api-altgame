@@ -130,7 +130,7 @@ FROM
 WHERE 
     i.bid_id = b.bid_id AND
     b.product_id = p.product_id AND
-    b.status = 'accepted'
+    (b.status = 'accepted' OR b.status = 'finish')
 ```
 
 # Roles Table
