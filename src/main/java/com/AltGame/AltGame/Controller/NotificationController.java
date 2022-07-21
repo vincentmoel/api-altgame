@@ -24,7 +24,7 @@ public class NotificationController {
         String username = userService.authentication().getName();
 
         if(notificationService.showUserNotifications(username).isEmpty()){
-            return new ResponseEntity<>(new ResponseDto("404", "Notification Data Not Found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Notification Data Not Found"), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(new ResponseDto().responseBuilder("200", "Success Get User Notifications", notificationService.showUserNotifications(username)), HttpStatus.OK);
     }
