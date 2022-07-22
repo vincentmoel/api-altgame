@@ -1,5 +1,8 @@
 package com.AltGame.AltGame.Controller;
 
+import com.AltGame.AltGame.Config.RefreshToken;
+import com.AltGame.AltGame.Config.UsersSecurityConfig;
+import com.AltGame.AltGame.Dto.LoginDto;
 import com.AltGame.AltGame.Dto.ResponseDto;
 import com.AltGame.AltGame.Dto.UserDto;
 import com.AltGame.AltGame.Entity.RoleEntity;
@@ -10,13 +13,18 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +39,22 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class LoginController {
     @Autowired
     UserService userService;
+
+
+    @PostMapping("/auth/login")
+    public ResponseEntity<?> login(@RequestBody LoginDto loginDto){
+        RestTemplate restTemplate = new RestTemplate();
+//        LoginDto[] dtoArray = restTemplate.getForObject("http://localhost:8082/login-page", LoginDto[].class);
+        Map<String, String> map = new HashMap<>();
+        map.put("email", loginDto.getUsername());
+        map.put("password", loginDto.getPassword());
+        Gson gson = new Gson();
+        System.out.println("map: "+gson.toJson(map));
+        ResponseEntity<?> responseEntity = restTemplate.postForEntity("http://localhost:8080/api/login"
+                ,gson.toJson(loginDto), String.class);
+        System.out.println("response: "+responseEntity);
+       return new ResponseEntity<>(responseEntity.getBody().toString().substring("data".length()),HttpStatus.OK);
+    }
 
     @PostMapping(value = "/api/signup")
     public ResponseEntity<?> createNewUser(@RequestBody UserDto userDto) {

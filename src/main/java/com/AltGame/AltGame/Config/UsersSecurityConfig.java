@@ -1,14 +1,12 @@
 package com.AltGame.AltGame.Config;
 
 import com.AltGame.AltGame.Dto.ResponseDto;
-import com.AltGame.AltGame.Service.UserService;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -80,7 +78,7 @@ public class UsersSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().configurationSource(corsConfigurationSource()).and().requiresChannel().anyRequest().requiresSecure();
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers("/api/login/**").permitAll();
+        http.authorizeRequests().antMatchers("/api/login/**","/auth/login").permitAll();
         http.authorizeRequests().antMatchers("/api/signup", "/swagger-ui.html/**","/refresh-token","/api/products/index","/api/products","/api/products/show/**","/api/categories/index/**","/api/bids/**","/api/notifications/**").permitAll();
 //        http.authorizeRequests().antMatchers("/api/bids/**").hasAnyAuthority("buyer");
 //        http.authorizeRequests().antMatchers("/api/products/**").hasAnyAuthority("seller");

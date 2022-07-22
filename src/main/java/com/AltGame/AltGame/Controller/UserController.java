@@ -28,7 +28,7 @@ public class UserController {
     public ResponseEntity<?> get_user(){
         Optional<VwUserEntity> vwUserEntity = userService.get_user(userService.authentication().getName());
         if(Objects.isNull(vwUserEntity)){
-            return new ResponseEntity<>(new ResponseDto("404", "User Not Found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "User Not Found"), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(new ResponseDto("200", "Success Get Data", vwUserEntity), HttpStatus.OK);
 
@@ -39,8 +39,8 @@ public class UserController {
         userDto.setImage(image);
         if(Objects.nonNull(userService.getUserByUsername(userService.authentication().getPrincipal().toString()))){
             userService.update(userDto);
-            return new ResponseEntity<>(new ResponseDto("200","Success Update"), HttpStatus.OK) ;
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Update", userDto), HttpStatus.OK) ;
         }
-        return new ResponseEntity<>(new ResponseDto("400","Failed Update"), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ResponseDto().responseBuilder("400","Failed Update"), HttpStatus.BAD_REQUEST);
     }
 }

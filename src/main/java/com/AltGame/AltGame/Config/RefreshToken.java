@@ -6,6 +6,8 @@ import com.AltGame.AltGame.Service.UserService;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -15,7 +17,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -41,6 +42,7 @@ public class RefreshToken extends UsernamePasswordAuthenticationFilter {
         this.userService = ctx.getBean(UserService.class);
 
     }
+
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
@@ -73,11 +75,13 @@ public class RefreshToken extends UsernamePasswordAuthenticationFilter {
     }
 
     @Override
+
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         String username = "", password = "";
         try{
             Map<String, String> mapRequest = new ObjectMapper().readValue(request.getInputStream(), Map.class);
             username = mapRequest.get("username");
+
             password = mapRequest.get("password");
         }catch (IOException io) {
             throw new AuthenticationServiceException(io.getMessage());
