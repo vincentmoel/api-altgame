@@ -66,9 +66,6 @@ public class UserService {
         user.setPhone(userDto.getPhone());
         user.setCity(userDto.getCity());
         user.setUpdatedAt(timestamp);
-        if(userDto.getPassword().length() > 0){
-            user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
-        }
         if(userDto.getBankAccount().length() > 0){
             user.setBankAccount(userDto.getBankAccount());
             user.setRoleId(2);
