@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -65,9 +66,6 @@ public class UserService {
         user.setPhone(userDto.getPhone());
         user.setCity(userDto.getCity());
         user.setUpdatedAt(timestamp);
-        if(userDto.getImage().getSize() > 0){
-            user.setImage(userDto.getImage().getBytes());
-        }
         if(userDto.getPassword().length() > 0){
             user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
         }
@@ -77,7 +75,11 @@ public class UserService {
         }
         userRepo.save(user);
     }
-
+    public void updateImage(MultipartFile image) throws IOException {
+        UserEntity user = userRepo.findByUsername(authentication().getPrincipal().toString());
+        user.setImage(image.getBytes());
+        userRepo.save(user);
+    }
     public Optional<VwUserEntity> get_user(String username){
         return vwUserRepo.findByUsername(username);
     }

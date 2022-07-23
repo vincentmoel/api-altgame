@@ -34,13 +34,22 @@ public class UserController {
 
     }
     @PostMapping("/update")
-    public ResponseEntity<?> update(UserDto userDto, @RequestParam("image") MultipartFile image) throws IOException {
+    public ResponseEntity<?> update(UserDto userDto) throws IOException {
         userDto.setUsername(userService.authentication().getPrincipal().toString());
-        userDto.setImage(image);
         if(Objects.nonNull(userService.getUserByUsername(userService.authentication().getPrincipal().toString()))){
             userService.update(userDto);
             return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Update", userDto), HttpStatus.OK) ;
         }
         return new ResponseEntity<>(new ResponseDto().responseBuilder("400","Failed Update"), HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/upload-image")
+    public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile image){
+        try{
+            userService.updateImage(image);
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Succes Update Profile"), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("400","Failed Update Profile"), HttpStatus.BAD_REQUEST);
+        }
     }
 }
