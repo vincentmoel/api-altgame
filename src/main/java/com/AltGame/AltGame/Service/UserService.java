@@ -57,7 +57,7 @@ public class UserService {
         user.setRoleId(2);
         userRepo.save(user);
     }
-    public void update(UserDto userDto) throws IOException {
+    public void update(UserDto userDto){
         UserEntity user = userRepo.findByUsername(userDto.getUsername());
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         user.setUsername(userDto.getUsername());
@@ -66,6 +66,9 @@ public class UserService {
         user.setPhone(userDto.getPhone());
         user.setCity(userDto.getCity());
         user.setUpdatedAt(timestamp);
+//        if(userDto.getPassword().length() > 0){
+//            user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
+//        }
         if(userDto.getBankAccount().length() > 0){
             user.setBankAccount(userDto.getBankAccount());
             user.setRoleId(2);

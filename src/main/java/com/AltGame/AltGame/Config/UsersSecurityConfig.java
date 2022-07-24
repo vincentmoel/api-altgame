@@ -79,10 +79,9 @@ public class UsersSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers("/api/login/**","/auth/login").permitAll();
-        http.authorizeRequests().antMatchers("/api/signup", "/swagger-ui.html/**","/refresh-token","/api/products/index","/api/products","/api/products/show/**","/api/categories/index/**","/api/bids/**","/api/notifications/**").permitAll();
-//        http.authorizeRequests().antMatchers("/api/bids/**").hasAnyAuthority("buyer");
-//        http.authorizeRequests().antMatchers("/api/products/**").hasAnyAuthority("seller");
-        http.authorizeRequests().antMatchers( "/api/**").hasAnyAuthority("buyer","seller");
+        http.authorizeRequests().antMatchers("/api/signup", "/swagger-ui.html/**","/refresh-token","/api/products/index","/api/products**","/api/products/show/**","/api/categories/index/**","/api/products/seller/**","/api/categories/index").permitAll();
+        http.authorizeRequests().antMatchers("/api/products/**","/api/products/update/**","/api/products/destroy/**","/api/products/my-products","/api/bids/accept-bid-buyer/**","/api/bids/all-bids-product/**").hasAnyAuthority("seller");
+        http.authorizeRequests().antMatchers( "/api/users/update","/api/bids/store","/api/notifications/**","/api/users/register-seller","/api/users/upload-image","/api/notifications/update-status-to-read/**","/api/notifications/show-user-notifications","/api/invoices/show/**","/api/invoices/pay/**","/api/invoices/index","/api/wishlist/destroy","/api/wishlists/store","/api/is-product-in-wishlist/**","/api/wishlists/index","/api/bids/destroy/**","/api/bids/update/**","/api/bids/show/**","/api/bids/index").hasAnyAuthority("buyer","seller");
         http.authorizeRequests().anyRequest().authenticated();
         RefreshToken refreshToken = new RefreshToken(authenticationManagerBean(), getApplicationContext()); //customize url login
         refreshToken.setFilterProcessesUrl("/api/login"); //customize url login

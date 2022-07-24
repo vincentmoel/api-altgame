@@ -34,11 +34,11 @@ public class UserController {
 
     }
     @PostMapping("/update")
-    public ResponseEntity<?> update(UserDto userDto) throws IOException {
+    public ResponseEntity<?> update(UserDto userDto){
         userDto.setUsername(userService.authentication().getPrincipal().toString());
         if(Objects.nonNull(userService.getUserByUsername(userService.authentication().getPrincipal().toString()))){
             userService.update(userDto);
-            return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Update", userDto), HttpStatus.OK) ;
+            return new ResponseEntity<>(new ResponseDto().responseBuilder("200","Success Update"), HttpStatus.OK) ;
         }
         return new ResponseEntity<>(new ResponseDto().responseBuilder("400","Failed Update"), HttpStatus.BAD_REQUEST);
     }

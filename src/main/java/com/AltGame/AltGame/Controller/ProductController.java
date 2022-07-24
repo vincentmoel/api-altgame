@@ -38,13 +38,7 @@ public class ProductController {
     // Get One Data From Table
     @GetMapping(path = "/show/{productId}")
     public ResponseEntity<?> show(@PathVariable int productId) {
-//        if(productService.show(productId).isEmpty()){
-//            return new ResponseEntity<>(new ResponseDto().responseBuilder("404", "Products Data Not Found "), HttpStatus.NOT_FOUND);
-//        }
         ProductEntity product = productService.show(productId);
-//
-//        LinkedHashMap<?,?> hm = new LinkedHashMap<>();
-//        hm.put()
 
         ResponseProduct responseProduct = new ResponseProduct();
         responseProduct.setProductId(product.getProductId());
